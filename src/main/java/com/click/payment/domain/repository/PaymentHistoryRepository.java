@@ -1,5 +1,8 @@
 package com.click.payment.domain.repository;
 
-public interface PaymentHistoryRepository {
+import com.click.payment.domain.entity.PaymentHistory;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PaymentHistoryRepository extends JpaRepository<PaymentHistory, String> {
 
 }

@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "PAYMENT_HISTORIES")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PaymentHistory {
     // 결재 내역 ID
     @Id

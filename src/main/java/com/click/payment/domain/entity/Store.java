@@ -6,9 +6,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "STORES")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Store {
     // 가맹점 ID
     @Id
