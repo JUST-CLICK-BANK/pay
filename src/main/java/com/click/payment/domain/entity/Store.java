@@ -2,6 +2,8 @@ package com.click.payment.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -19,24 +21,30 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Store {
     // 가맹점 ID
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "STORE_ID")
     private UUID store_id;
+
     // 가맹점 이름
     @Column(name = "STORE_NAME")
     private String store_name;
+
     // 가맹점 대표
     @Column(name = "STORE_CEO")
     private String store_ceo;
+
     // 가맹점 API key
     @Column(name = "STORE_KEY")
     private String store_key;
+
     // 연동 계좌
     @Column(name = "ACCOUNT")
-    private String account;
+    private String store_account;
+
     // 발급 일자
     @Column(name = "STORE_CREATE_AT")
     private LocalDateTime store_create_at;
+
     // 사용 여부
     @Column(name = "STORE_DISABLE")
     private boolean store_disable;
