@@ -1,5 +1,6 @@
 package com.click.payment.domain.entity;
 
+import com.click.payment.domain.dto.request.StoreRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -27,10 +29,12 @@ public class Store {
 
     // 가맹점 이름
     @Column(name = "STORE_NAME")
+    @Setter
     private String store_name;
 
     // 가맹점 대표
     @Column(name = "STORE_CEO")
+    @Setter
     private String store_ceo;
 
     // 가맹점 API key
@@ -39,6 +43,7 @@ public class Store {
 
     // 연동 계좌
     @Column(name = "ACCOUNT")
+    @Setter
     private String store_account;
 
     // 발급 일자
@@ -48,4 +53,21 @@ public class Store {
     // 사용 여부
     @Column(name = "STORE_DISABLE")
     private boolean store_disable;
+
+    public void updateInfo(StoreRequest storeRequest) {
+        // 주소 수정
+        if (storeRequest.storeAccount() != null) {
+            this.store_account = storeRequest.storeAccount();
+        }
+
+        // 가맹점 상호 수정
+        if (storeRequest.storeName() != null) {
+            this.store_name = storeRequest.storeName();
+        }
+
+        // 가맹점 대표 수정
+        if (storeRequest.storeCeo() != null) {
+            this.store_ceo = storeRequest.storeCeo();
+        }
+    }
 }

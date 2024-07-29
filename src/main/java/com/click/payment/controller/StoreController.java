@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +41,21 @@ public class StoreController {
     }
 
     // Update
+    @PutMapping("/{storeId}")
+    public void updateStore(
+        @PathVariable("storeId") UUID storeId,
+        @RequestBody StoreRequest storeRequest
+    ) {
+        storeService.updateStoreInfo(storeId, storeRequest);
+    }
 
+    @PutMapping("/redirect/{storeId}")
+    public void updateRedirectUrl(
+        @PathVariable("storeId") UUID storeId,
+        @RequestBody String redirectUrl
+    ) {
+        storeService.updateRedirectUrl(storeId, redirectUrl);
+    }
 
     // Delete
 }

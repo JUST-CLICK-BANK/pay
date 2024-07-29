@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -24,10 +25,11 @@ public class AllowedRedirect {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "REDIR_ID")
-    private Long redir_id;
+    private Long redirId;
 
+    @Setter
     @Column(name = "REDIR_URL")
-    private String redir_url;
+    private String redirUrl;
 
     @ManyToOne
     @JoinColumn(name = "STORE_ID")

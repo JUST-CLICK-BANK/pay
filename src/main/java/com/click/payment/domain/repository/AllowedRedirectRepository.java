@@ -11,4 +11,6 @@ public interface AllowedRedirectRepository extends JpaRepository<AllowedRedirect
 
     @Query("SELECT r.redir_url FROM AllowedRedirect r WHERE r.storeId=:store")
     List<String> findRedirectUrlByStoreId(Store store);
+
+    AllowedRedirect findByStoreId(Store storeId);
 }

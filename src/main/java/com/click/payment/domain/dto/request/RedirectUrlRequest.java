@@ -5,14 +5,14 @@ import com.click.payment.domain.entity.Store;
 
 public record RedirectUrlRequest(
     String storeId,
-    String storeAccount
+    String redirUrl
 ) {
 
     public AllowedRedirect toEntity(Store store) {
         return AllowedRedirect.builder()
-            .redir_id(null)
+            .redirId(null)
             .storeId(store)
-            .redir_url(storeAccount)
+            .redirUrl(redirUrl)
             .build();
     }
 }
