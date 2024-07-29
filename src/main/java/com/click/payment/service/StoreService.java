@@ -12,4 +12,6 @@ public interface StoreService {
     void updateRedirectUrl(UUID storeId, String redirectUrl);
 
     void deleteRedirectUrl(Long redirectId);
+
+    void deleteStore(UUID storeId);
 }

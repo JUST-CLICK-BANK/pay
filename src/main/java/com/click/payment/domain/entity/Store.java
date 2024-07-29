@@ -51,7 +51,7 @@ public class Store {
     private LocalDateTime store_create_at;
 
     // 사용 여부
-    @Column(name = "STORE_DISABLE")
+    @Column(name = "STORE_DISABLE") @Setter
     private boolean store_disable;
 
     public void updateInfo(StoreRequest storeRequest) {

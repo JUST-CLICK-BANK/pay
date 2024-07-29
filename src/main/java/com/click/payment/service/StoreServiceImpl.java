@@ -73,4 +73,13 @@ public class StoreServiceImpl implements StoreService, AllowedRedirectService {
     public void deleteRedirectUrl(Long redirectId) {
         allowedRedirectRepository.deleteById(redirectId);
     }
+
+    // 가맹점 폐업 시 삭제(disable = false)
+    @Override
+    public void deleteStore(UUID storeId) {
+        Optional<Store> byId = storeRepository.findById(storeId);
+        Store store = byId.orElseThrow(() -> new IllegalArgumentException("Store not found"));
+
+        store.setStore_disable(false);
+    }
 }

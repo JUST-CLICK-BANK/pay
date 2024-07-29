@@ -63,4 +63,9 @@ public class StoreController {
     public void deleteRedirectUrl(@PathVariable("redirectId") Long redirectId) {
         storeService.deleteRedirectUrl(redirectId);
     }
+
+    @DeleteMapping("/{storeId}")
+    public void deleteStore(@PathVariable("storeId") UUID storeId) {
+        storeService.deleteStore(storeId);
+    }
 }

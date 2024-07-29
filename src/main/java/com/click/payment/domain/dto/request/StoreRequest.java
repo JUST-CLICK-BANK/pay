@@ -18,6 +18,7 @@ public record StoreRequest(
             .store_key(storeKey)
             .store_account(storeAccount)
             .store_create_at(LocalDateTime.now())
+            .store_disable(true)
             .build();
     }
 }
