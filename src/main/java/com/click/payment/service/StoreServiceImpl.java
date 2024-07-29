@@ -67,4 +67,10 @@ public class StoreServiceImpl implements StoreService, AllowedRedirectService {
 
         redirect.setRedirUrl(redirectUrl);
     }
+
+    // Redirect Url 삭제
+    @Override
+    public void deleteRedirectUrl(Long redirectId) {
+        allowedRedirectRepository.deleteById(redirectId);
+    }
 }

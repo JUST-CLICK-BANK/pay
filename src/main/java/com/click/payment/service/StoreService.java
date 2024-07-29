@@ -10,4 +10,6 @@ public interface StoreService {
     void updateStoreInfo(UUID storeId, StoreRequest storeRequest);
 
     void updateRedirectUrl(UUID storeId, String redirectUrl);
+
+    void deleteRedirectUrl(Long redirectId);
 }
