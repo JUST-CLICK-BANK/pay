@@ -23,27 +23,27 @@ public class PaymentHistory {
     // 결재 내역 ID
     @Id
     @Column(name = "PAY_ID")
-    private String pay_id;
+    private String payId;
     // 결제 카드 ID
     @Column(name = "CARD_ID")
-    private Long card_id;
+    private Long cardId;
     // 주문 번호
     @Column(name = "PAY_NUM")
-    private Long pay_num;
+    private Long payNum;
     // 결제 금액
     @Column(name = "PAY_AMOUNT")
-    private Integer pay_amount;
+    private Integer payAmount;
     // 결제 상태
     @Column(name = "PAY_STATE")
-    private PaymentState pay_state;
+    private PaymentState payState;
     // 금액 결제 시간
     @Column(name = "PAY_CREATE_AT")
-    private LocalDateTime pay_create_at;
+    private LocalDateTime payCreateAt;
     // 금액 환불 시간
     @Column(name = "PAY_REFUND_AT")
-    private LocalDateTime pay_refund_at;
+    private LocalDateTime payRefundAt;
     // 가맹점 ID
     @ManyToOne
-    @Column(name = "store_id")
-    private Store store_id;
+    @Column(name = "STORE_ID")
+    private Store storeId;
 }

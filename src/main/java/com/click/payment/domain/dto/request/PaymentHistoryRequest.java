@@ -15,14 +15,14 @@ public record PaymentHistoryRequest(
 ) {
     public PaymentHistory toEntity() {
         return PaymentHistory.builder()
-            .pay_id(pay_id)
-            .store_id(store_id)
-            .card_id(card_id)
-            .pay_num(pay_num)
-            .pay_amount(pay_amount)
-            .pay_state(pay_state)
-            .pay_create_at(LocalDateTime.now())
-            .pay_refund_at(null)
+            .payId(pay_id)
+            .storeId(store_id)
+            .cardId(card_id)
+            .payNum(pay_num)
+            .payAmount(pay_amount)
+            .payState(pay_state)
+            .payCreateAt(LocalDateTime.now())
+            .payRefundAt(null)
             .build();
     }
 }

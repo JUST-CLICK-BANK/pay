@@ -2,11 +2,11 @@ package com.click.payment.controller;
 
 import com.click.payment.domain.dto.request.PaymentHistoryRequest;
 import com.click.payment.domain.dto.response.PaymentHistoryResponse;
+import com.click.payment.domain.entity.Store;
 import com.click.payment.service.PaymentHistoryService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +26,7 @@ public class PaymentHistoryController {
     // 전체 결제 내역 조회
     @GetMapping("/{storeId}")
     public List<PaymentHistoryResponse> getPaymentHistories(
-        @PathVariable("storeId") UUID storeId
+        @PathVariable("storeId") Store storeId
     ) {
         return paymentHistoryService.getPaymentHistories(storeId);
     }
@@ -34,7 +34,8 @@ public class PaymentHistoryController {
     // 특정 결제 내역 조회 (단일)
     @GetMapping("/{storeId}")
     public PaymentHistoryResponse getPaymentHistory(
-        @PathVariable("storeId") UUID storeId
+        @PathVariable("storeId") Store storeId
+
     ) {
         return paymentHistoryService.getPaymentHistory(storeId);
     }
