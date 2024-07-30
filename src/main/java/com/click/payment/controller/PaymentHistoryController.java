@@ -2,10 +2,10 @@ package com.click.payment.controller;
 
 import com.click.payment.domain.dto.request.PaymentHistoryRequest;
 import com.click.payment.domain.dto.response.PaymentHistoryResponse;
+import com.click.payment.domain.entity.PaymentHistory;
 import com.click.payment.domain.entity.Store;
 import com.click.payment.service.PaymentHistoryService;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +25,7 @@ public class PaymentHistoryController {
 
     // 전체 결제 내역 조회
     @GetMapping("/{storeId}")
-    public List<PaymentHistoryResponse> getPaymentHistories(
+    public List<PaymentHistory> getPaymentHistories(
         @PathVariable("storeId") Store storeId
     ) {
         return paymentHistoryService.getPaymentHistories(storeId);
@@ -34,26 +34,28 @@ public class PaymentHistoryController {
     // 특정 결제 내역 조회 (단일)
     @GetMapping("/{storeId}")
     public PaymentHistoryResponse getPaymentHistory(
-        @PathVariable("storeId") Store storeId
-
+        @PathVariable("storeId") Store storeId,
+        @RequestParam("payment") String payId
     ) {
-        return paymentHistoryService.getPaymentHistory(storeId);
+        return paymentHistoryService.getPaymentHistory(storeId, payId);
     }
 
     // 결제 내역 생성
-    @PostMapping
+    @PostMapping("/{storeId}")
     public void insertPaymentHistory(
+        @PathVariable("storeId") Store storeId,
         @RequestBody PaymentHistoryRequest req
     ) {
-        paymentHistoryService.insertPaymentHistory(req);
+        paymentHistoryService.insertPaymentHistory(storeId, req);
     }
 
     // 결제 상태 수정
-    @PutMapping("/{payId}")
+    @PutMapping("/{storeId}")
     public void updatePaymentHistoryState(
-        @PathVariable("payId") String payId,
-        @RequestParam("state") String state
+        @PathVariable("storeId") Store storeId,
+        @RequestParam("payment") String payId,
+        @RequestBody PaymentHistoryRequest req
     ) {
-        paymentHistoryService.updatePaymentHistoryState(payId, state);
+        paymentHistoryService.updatePaymentHistoryState(storeId, payId, req);
     }
 }

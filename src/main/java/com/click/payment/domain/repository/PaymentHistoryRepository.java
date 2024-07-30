@@ -7,5 +7,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentHistoryRepository extends JpaRepository<PaymentHistory, String> {
-    List<PaymentHistoryResponse> findByStoreId(Store storeId);
+    List<PaymentHistory> findByStoreId(Store storeId);
+    PaymentHistoryResponse findByStoreIdAndPayId(Store storeId, String payId);
 }

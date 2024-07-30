@@ -2,11 +2,8 @@ package com.click.payment.domain.entity;
 
 
 import com.click.payment.domain.type.PaymentState;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +41,6 @@ public class PaymentHistory {
     private LocalDateTime payRefundAt;
     // 가맹점 ID
     @ManyToOne
-    @Column(name = "STORE_ID")
+    @JoinColumn(name = "STORE_ID")
     private Store storeId;
 }
