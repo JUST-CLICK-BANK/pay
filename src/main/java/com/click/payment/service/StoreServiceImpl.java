@@ -80,6 +80,6 @@ public class StoreServiceImpl implements StoreService, AllowedRedirectService {
         Optional<Store> byId = storeRepository.findById(storeId);
         Store store = byId.orElseThrow(() -> new IllegalArgumentException("Store not found"));
 
-        store.setStore_disable(false);
+        store.setStoreDisable(false);
     }
 }
