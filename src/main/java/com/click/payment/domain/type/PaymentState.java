@@ -14,13 +14,4 @@ public enum PaymentState {
     REFUND_COMPLETE("환불 완료");
 
     private final String state;
-
-    public static PaymentState fromState(String state) {
-        for (PaymentState paymentState : PaymentState.values()) {
-            if (paymentState.getState().equals(state)) {
-                return paymentState;
-            }
-        }
-        return PAY_CANCEL;
-    }
 }

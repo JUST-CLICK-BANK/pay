@@ -12,13 +12,13 @@ public record StoreRequest(
 
     public Store toEntity() {
         return Store.builder()
-            .store_id(null)
-            .store_name(storeName)
-            .store_ceo(storeCeo)
-            .store_key(storeKey)
-            .store_account(storeAccount)
-            .store_create_at(LocalDateTime.now())
-            .store_disable(true)
+            .storeId(null)
+            .storeName(storeName)
+            .storeCeo(storeCeo)
+            .storeKey(storeKey)
+            .storeAccount(storeAccount)
+            .storeCreateAt(LocalDateTime.now())
+            .storeDisable(true)
             .build();
     }
 }

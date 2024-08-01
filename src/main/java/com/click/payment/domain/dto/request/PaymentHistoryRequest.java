@@ -6,21 +6,18 @@ import com.click.payment.domain.type.PaymentState;
 import java.time.LocalDateTime;
 
 public record PaymentHistoryRequest(
-    String pay_id,
-    Store store_id,
-    Long card_id,
-    Long pay_num,
-    Integer pay_amount,
-    PaymentState pay_state
+    Store store,
+    Long cardId,
+    Long payNum,
+    Integer payAmount
 ) {
-    public PaymentHistory toEntity() {
+    public PaymentHistory toEntity(Store store) {
         return PaymentHistory.builder()
-            .payId(pay_id)
-            .storeId(store_id)
-            .cardId(card_id)
-            .payNum(pay_num)
-            .payAmount(pay_amount)
-            .payState(pay_state)
+            .storeId(store)
+            .cardId(cardId)
+            .payNum(payNum)
+            .payAmount(payAmount)
+            .payState(PaymentState.valueOf("PAY_STANDBY"))
             .payCreateAt(LocalDateTime.now())
             .payRefundAt(null)
             .build();

@@ -19,8 +19,9 @@ import lombok.NoArgsConstructor;
 public class PaymentHistory {
     // 결재 내역 ID
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PAY_ID")
-    private String payId;
+    private Long payId;
     // 결제 카드 ID
     @Column(name = "CARD_ID")
     private Long cardId;
@@ -32,6 +33,7 @@ public class PaymentHistory {
     private Integer payAmount;
     // 결제 상태
     @Column(name = "PAY_STATE")
+    @Enumerated(EnumType.STRING)
     private PaymentState payState;
     // 금액 결제 시간
     @Column(name = "PAY_CREATE_AT")
@@ -40,7 +42,14 @@ public class PaymentHistory {
     @Column(name = "PAY_REFUND_AT")
     private LocalDateTime payRefundAt;
     // 가맹점 ID
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORE_ID")
     private Store storeId;
+
+    public void setPayState(PaymentState payState) {
+        this.payState = payState;
+    }
+    public void setPayRefundAt(LocalDateTime payRefundAt) {
+        this.payRefundAt = payRefundAt;
+    }
 }

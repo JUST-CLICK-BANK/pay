@@ -1,39 +1,30 @@
 package com.click.payment.domain.dto.response;
 
-import com.click.payment.domain.entity.Store;
+import com.click.payment.domain.entity.PaymentHistory;
 import com.click.payment.domain.type.PaymentState;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record PaymentHistoryResponse(
-    String pay_id,
-    Store store_id,
-    Long card_id,
-    Long pay_num,
-    Integer pay_amount,
-    PaymentState pay_state,
-    LocalDateTime pay_create_at,
-    LocalDateTime pay_refund_at
+    Long payId,
+    UUID storeId,
+    Long cardId,
+    Long payNum,
+    Integer payAmount,
+    PaymentState payState,
+    LocalDateTime payCreateAt,
+    LocalDateTime payRefundAt
 ) {
-    public static PaymentHistoryResponse from(
-        String pay_id,
-        Store store_id,
-        Long card_id,
-        Long pay_num,
-        Integer pay_amount,
-        PaymentState pay_state,
-        LocalDateTime pay_create_at,
-        LocalDateTime pay_refund_at
-
-    ) {
+    public static PaymentHistoryResponse from(PaymentHistory paymentHistory) {
         return new PaymentHistoryResponse(
-            pay_id,
-            store_id,
-            card_id,
-            pay_num,
-            pay_amount,
-            pay_state,
-            pay_create_at,
-            pay_refund_at
+            paymentHistory.getPayId(),
+            paymentHistory.getStoreId().getStoreId(),
+            paymentHistory.getCardId(),
+            paymentHistory.getPayNum(),
+            paymentHistory.getPayAmount(),
+            paymentHistory.getPayState(),
+            paymentHistory.getPayCreateAt(),
+            paymentHistory.getPayRefundAt()
         );
     }
 }

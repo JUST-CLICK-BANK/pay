@@ -2,13 +2,15 @@ package com.click.payment.domain.dto.request;
 
 import com.click.payment.domain.entity.PaymentHistory;
 import com.click.payment.domain.type.PaymentState;
+import java.time.LocalDateTime;
 
 public record UpdatePaymentHistoryRequest(
-        PaymentState pay_state
+        PaymentState payState
 ) {
-    public PaymentHistory toEntity() {
+    public PaymentHistory toEntity(LocalDateTime payRefundAt) {
         return PaymentHistory.builder()
-                .payState(pay_state)
+                .payState(payState)
+                .payRefundAt(payRefundAt)
                 .build();
     }
 }
