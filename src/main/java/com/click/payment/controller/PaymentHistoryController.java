@@ -4,7 +4,7 @@ import com.click.payment.domain.dto.request.PaymentHistoryRequest;
 import com.click.payment.domain.dto.request.UpdatePaymentHistoryRequest;
 import com.click.payment.domain.dto.response.PaymentHistoryResponse;
 import com.click.payment.domain.entity.PaymentHistory;
-import com.click.payment.domain.entity.Store;
+import com.click.payment.domain.entity.Business;
 import com.click.payment.service.PaymentHistoryService;
 import java.util.List;
 import java.util.UUID;
@@ -25,38 +25,38 @@ public class PaymentHistoryController {
     private final PaymentHistoryService paymentHistoryService;
 
     // 전체 결제 내역 조회
-    @GetMapping("/{storeId}")
+    @GetMapping("/{businessId}")
     public List<PaymentHistory> getPaymentHistories(
-        @PathVariable("storeId") UUID storeId
+        @PathVariable("businessId") UUID businessId
     ) {
-        return paymentHistoryService.getPaymentHistories(storeId);
+        return paymentHistoryService.getPaymentHistories(businessId);
     }
 
     // 특정 결제 내역 조회 (단일)
-    @GetMapping("/{storeId}/{payId}")
+    @GetMapping("/{businessId}/{payId}")
     public PaymentHistoryResponse getPaymentHistory(
-        @PathVariable("storeId") UUID storeId,
+        @PathVariable("businessId") UUID businessId,
         @PathVariable("payId") Long payId
     ) {
-        return paymentHistoryService.getPaymentHistory(storeId, payId);
+        return paymentHistoryService.getPaymentHistory(businessId, payId);
     }
 
     // 결제 내역 생성
-    @PostMapping("/{storeId}")
+    @PostMapping("/{businessId}")
     public void insertPaymentHistory(
-        @PathVariable("storeId") Store store,
+        @PathVariable("businessId") Business business,
         @RequestBody PaymentHistoryRequest req
     ) {
-        paymentHistoryService.insertPaymentHistory(store, req);
+        paymentHistoryService.insertPaymentHistory(business, req);
     }
 
     // 결제 상태 수정
-    @PutMapping("/{storeId}/{payId}")
+    @PutMapping("/{businessId}/{payId}")
     public void updatePaymentHistoryState(
-        @PathVariable("storeId") UUID storeId,
+        @PathVariable("businessId") UUID businessId,
         @PathVariable("payId") Long payId,
         @RequestBody UpdatePaymentHistoryRequest req
     ) {
-        paymentHistoryService.updatePaymentHistoryState(storeId, payId, req);
+        paymentHistoryService.updatePaymentHistoryState(businessId, payId, req);
     }
 }

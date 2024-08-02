@@ -1,19 +1,19 @@
 package com.click.payment.domain.dto.request;
 
 import com.click.payment.domain.entity.PaymentHistory;
-import com.click.payment.domain.entity.Store;
+import com.click.payment.domain.entity.Business;
 import com.click.payment.domain.type.PaymentState;
 import java.time.LocalDateTime;
 
 public record PaymentHistoryRequest(
-    Store store,
+    Business business,
     Long cardId,
     Long payNum,
     Integer payAmount
 ) {
-    public PaymentHistory toEntity(Store store) {
+    public PaymentHistory toEntity(Business business) {
         return PaymentHistory.builder()
-            .storeId(store)
+            .businessId(business)
             .cardId(cardId)
             .payNum(payNum)
             .payAmount(payAmount)

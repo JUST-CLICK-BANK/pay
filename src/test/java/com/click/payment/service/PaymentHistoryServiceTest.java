@@ -7,7 +7,7 @@ import com.click.payment.TestInitData;
 import com.click.payment.domain.dto.request.PaymentHistoryRequest;
 import com.click.payment.domain.dto.request.UpdatePaymentHistoryRequest;
 import com.click.payment.domain.repository.PaymentHistoryRepository;
-import com.click.payment.domain.repository.StoreRepository;
+import com.click.payment.domain.repository.BusinessRepository;
 import com.click.payment.domain.type.PaymentState;
 import java.util.List;
 import java.util.UUID;
@@ -27,9 +27,9 @@ class PaymentHistoryServiceTest extends TestInitData {
     @Mock
     PaymentHistoryRepository paymentHistoryRepository;
     @Mock
-    StoreRepository storeRepository;
+    BusinessRepository businessRepository;
 
-    UUID storeId = paymentHistory.getStoreId().getStoreId();
+    UUID businessId = paymentHistory.getBusinessId().getBusinessId();
     Long payId = paymentHistory.getPayId();
     UUID randomId = UUID.randomUUID();
 
@@ -38,23 +38,23 @@ class PaymentHistoryServiceTest extends TestInitData {
         @Test
         void 성공_가맹점의_전체_결제_내역_조회함() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(store.getStoreId()))
-                    .willReturn(store);
-            BDDMockito.given(paymentHistoryRepository.findByStoreId(paymentHistory.getStoreId()))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(business.getBusinessId()))
+                    .willReturn(business);
+            BDDMockito.given(paymentHistoryRepository.findByBusinessId(paymentHistory.getBusinessId()))
                 .willReturn(List.of(paymentHistory));
 
             // when
-            paymentHistoryService.getPaymentHistories(paymentHistory.getStoreId().getStoreId());
+            paymentHistoryService.getPaymentHistories(paymentHistory.getBusinessId().getBusinessId());
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.times(1))
-                .findByStoreId(paymentHistory.getStoreId());
+                .findByBusinessId(paymentHistory.getBusinessId());
         }
 
         @Test
         void 실패_가맹점이_유효하지_않음() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(randomId))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(randomId))
                 .willReturn(null);
 
             // when
@@ -62,7 +62,7 @@ class PaymentHistoryServiceTest extends TestInitData {
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.never())
-                .findByStoreId(store);
+                .findByBusinessId(business);
         }
     }
 
@@ -71,23 +71,23 @@ class PaymentHistoryServiceTest extends TestInitData {
         @Test
         void 성공_가맹점의_특정_결제_내역_조회함() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(store.getStoreId()))
-                .willReturn(store);
-            BDDMockito.given(paymentHistoryRepository.findByStoreIdAndPayId(store, payId))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(business.getBusinessId()))
+                .willReturn(business);
+            BDDMockito.given(paymentHistoryRepository.findByBusinessIdAndPayId(business, payId))
                 .willReturn(paymentHistory);
 
             // when
-            paymentHistoryService.getPaymentHistory(storeId, payId);
+            paymentHistoryService.getPaymentHistory(businessId, payId);
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.times(1))
-                .findByStoreIdAndPayId(store, payId);
+                .findByBusinessIdAndPayId(business, payId);
         }
 
         @Test
         void 실패_가맹점이_유효하지_않음() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(randomId))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(randomId))
                 .willReturn(null);
 
             // when
@@ -95,14 +95,14 @@ class PaymentHistoryServiceTest extends TestInitData {
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.never())
-                .findByStoreId(store);
+                .findByBusinessId(business);
         }
     }
 
     @Nested
     class insertPaymentHistory {
         PaymentHistoryRequest req = new PaymentHistoryRequest(
-            paymentHistory.getStoreId(),
+            paymentHistory.getBusinessId(),
             paymentHistory.getCardId(),
             paymentHistory.getPayNum(),
             paymentHistory.getPayAmount()
@@ -111,11 +111,11 @@ class PaymentHistoryServiceTest extends TestInitData {
         @Test
         void 성공_결제_내역_생성() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(storeId))
-                .willReturn(store);
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId))
+                .willReturn(business);
 
             // when
-            paymentHistoryService.insertPaymentHistory(store, req);
+            paymentHistoryService.insertPaymentHistory(business, req);
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.times(1))
@@ -125,14 +125,15 @@ class PaymentHistoryServiceTest extends TestInitData {
         @Test
         void 실패_가맹점이_유효하지_않음() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(store.getStoreId()))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(business.getBusinessId()))
                 .willReturn(null);
             // when
-            assertThrows(NullPointerException.class, () -> paymentHistoryService.insertPaymentHistory(store, req));
+            assertThrows(NullPointerException.class, () -> paymentHistoryService.insertPaymentHistory(
+                business, req));
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.never())
-                .findByStoreId(store);
+                .findByBusinessId(business);
         }
     }
 
@@ -141,22 +142,22 @@ class PaymentHistoryServiceTest extends TestInitData {
         @Test
         void 성공_특정_결제_내역의_결제_상태가_수정됨() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(storeId))
-                .willReturn(store);
-            BDDMockito.given(paymentHistoryRepository.findByStoreIdAndPayId(store, payId))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId))
+                .willReturn(business);
+            BDDMockito.given(paymentHistoryRepository.findByBusinessIdAndPayId(business, payId))
                 .willReturn(paymentHistory);
             UpdatePaymentHistoryRequest req = new UpdatePaymentHistoryRequest(
                 PaymentState.PAY_COMPLETE
             );
 
             // when
-            paymentHistoryService.updatePaymentHistoryState(storeId, payId, req);
+            paymentHistoryService.updatePaymentHistoryState(businessId, payId, req);
         }
 
         @Test
         void 실패_가맹점이_유효하지_않음() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(randomId))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(randomId))
                 .willReturn(null);
 
             // when
@@ -164,22 +165,22 @@ class PaymentHistoryServiceTest extends TestInitData {
 
             // then
             Mockito.verify(paymentHistoryRepository, Mockito.never())
-                .findByStoreId(store);
+                .findByBusinessId(business);
         }
 
         @Test
         void 실패_결제_내역이_존재하지_않음() {
             // given
-            BDDMockito.given(storeRepository.findByStoreId(storeId))
-                .willReturn(store);
-            BDDMockito.given(paymentHistoryRepository.findByStoreIdAndPayId(paymentHistory.getStoreId(), payId))
+            BDDMockito.given(businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId))
+                .willReturn(business);
+            BDDMockito.given(paymentHistoryRepository.findByBusinessIdAndPayId(paymentHistory.getBusinessId(), payId))
                 .willReturn(null);
             UpdatePaymentHistoryRequest req = new UpdatePaymentHistoryRequest(
                 PaymentState.PAY_COMPLETE
             );
 
             // when
-            assertThrows(NullPointerException.class, () -> paymentHistoryService.updatePaymentHistoryState(storeId, payId, req));
+            assertThrows(NullPointerException.class, () -> paymentHistoryService.updatePaymentHistoryState(businessId, payId, req));
         }
     }
 }

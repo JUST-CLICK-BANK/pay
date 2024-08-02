@@ -43,8 +43,8 @@ public class PaymentHistory {
     private LocalDateTime payRefundAt;
     // 가맹점 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STORE_ID")
-    private Store storeId;
+    @JoinColumn(name = "BUSINESS_ID")
+    private Business businessId;
 
     public void setPayState(PaymentState payState) {
         this.payState = payState;

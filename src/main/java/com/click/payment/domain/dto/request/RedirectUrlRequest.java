@@ -1,17 +1,17 @@
 package com.click.payment.domain.dto.request;
 
 import com.click.payment.domain.entity.AllowedRedirect;
-import com.click.payment.domain.entity.Store;
+import com.click.payment.domain.entity.Business;
 
 public record RedirectUrlRequest(
-    String storeId,
+    String businessId,
     String redirUrl
 ) {
 
-    public AllowedRedirect toEntity(Store store) {
+    public AllowedRedirect toEntity(Business business) {
         return AllowedRedirect.builder()
             .redirId(null)
-            .storeId(store)
+            .businessId(business)
             .redirUrl(redirUrl)
             .build();
     }

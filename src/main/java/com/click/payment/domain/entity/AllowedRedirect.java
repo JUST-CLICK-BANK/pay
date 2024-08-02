@@ -32,6 +32,6 @@ public class AllowedRedirect {
     private String redirUrl;
 
     @ManyToOne
-    @JoinColumn(name = "STORE_ID")
-    private Store storeId;
+    @JoinColumn(name = "BUSINESS_ID")
+    private Business businessId;
 }
