@@ -83,10 +83,5 @@ public class Business {
         if (updateBusinessRequest.businessCeo() != null) {
             this.businessCeo = updateBusinessRequest.businessCeo();
         }
-
-        // 가맹점 API Key 수정
-        if (updateBusinessRequest.businessKey() != null) {
-            this.businessKey = updateBusinessRequest.businessKey();
-        }
     }
 }

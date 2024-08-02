@@ -9,7 +9,6 @@ import com.click.payment.domain.repository.AllowedRedirectRepository;
 import com.click.payment.domain.repository.BusinessRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,46 +38,52 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
     @Override
     @Transactional
     public void updateBusinessInfo(UUID businessId, UpdateBusinessRequest updateBusinessRequest) {
-        Optional<Business> byId = businessRepository.findById(businessId);
-        Business business = byId.orElseThrow(
-            () -> new IllegalArgumentException("Business not found"));
+        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId);
+        if(byId.getBusinessId() == null)
+            throw new IllegalArgumentException("Business not found");
 
-        business.updateInfo(updateBusinessRequest);
+        byId.updateInfo(updateBusinessRequest);
     }
 
     // 가맹점 폐업 시 삭제(disable = false)
     @Override
     @Transactional
     public void deleteBusiness(UUID businessId) {
-        Optional<Business> byId = businessRepository.findById(businessId);
-        Business business = byId.orElseThrow(() -> new IllegalArgumentException("Business not found"));
+        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId);
+        if(byId.getBusinessId() == null)
+            throw new IllegalArgumentException("Business not found");
 
-        business.setBusinessDisable(true);
+        byId.setBusinessDisable(true);
     }
 
     // Redirect Url 등록
     @Override
     public void registerUrl(RedirectUrlRequest redirectUrlRequest) {
-        Optional<Business> byId = businessRepository.findById(
-            UUID.fromString(redirectUrlRequest.businessId()));
-        Business business = byId.orElseThrow(() -> new IllegalArgumentException("Business not found"));
+        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(UUID.fromString(redirectUrlRequest.businessId()));
+        if(byId.getBusinessId() == null)
+            throw new NullPointerException("Business not found");
 
-        allowedRedirectRepository.save(redirectUrlRequest.toEntity(business));
+        allowedRedirectRepository.save(redirectUrlRequest.toEntity(byId));
     }
 
     // Redirect Url 조회
     @Override
     public List<String> getRedirectUrl(UUID businessId) {
-        Optional<Business> byId = businessRepository.findById(businessId);
-        Business business = byId.orElseThrow(
-            () -> new IllegalArgumentException("Business not found"));
-        return allowedRedirectRepository.findRedirectUrlByBusinessId(business);
+        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId);
+        if(byId.getBusinessId() == null)
+            throw new NullPointerException("Business not found");
+
+        return allowedRedirectRepository.findRedirectUrlByBusinessId(byId);
     }
 
     // Redirect Url 삭제
     @Override
     @Transactional
     public void deleteRedirectUrl(Business business) {
-        allowedRedirectRepository.deleteByBusinessId(business);
+        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(business.getBusinessId());
+        if(byId.getBusinessId() == null)
+            throw new NullPointerException("Business not found");
+
+        allowedRedirectRepository.deleteByBusinessId(byId);
     }
 }

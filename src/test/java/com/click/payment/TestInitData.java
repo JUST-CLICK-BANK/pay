@@ -11,6 +11,7 @@ import java.util.UUID;
 public class TestInitData {
     protected final PaymentHistory paymentHistory;
     protected final Business business;
+    protected final AllowedRedirect allowedRedirect;
 
     List<PaymentHistory> paymentHistoriesTest = null;
     List<AllowedRedirect> allowedRedirectsTest = null;
@@ -36,6 +37,11 @@ public class TestInitData {
             PaymentState.PAY_STANDBY,
             LocalDateTime.now(),
             null,
+            business
+        );
+        this.allowedRedirect = new AllowedRedirect(
+            1L,
+            "a.com",
             business
         );
     }
