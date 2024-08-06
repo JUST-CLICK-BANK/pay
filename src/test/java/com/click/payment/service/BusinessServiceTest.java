@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.click.payment.TestInitData;
+import com.click.payment.Util.PasswordUtils;
 import com.click.payment.domain.dto.request.BusinessRequest;
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;
@@ -28,6 +29,8 @@ class BusinessServiceTest extends TestInitData {
     BusinessRepository businessRepository;
     @Mock
     AllowedRedirectRepository allowedRedirectRepository;
+    @Mock
+    PasswordUtils passwordUtils;
 
     UUID businessId = business.getBusinessId();
     UUID randomId = UUID.randomUUID();
@@ -55,12 +58,15 @@ class BusinessServiceTest extends TestInitData {
 
         @Test
         void 실패_가맹점_등록이_안됨() {
+            // given
+            String businessKey = "a";
+
             // when
             businessService.registerBusiness(req);
 
             // then
             Mockito.verify(businessRepository, Mockito.never())
-                .save(req.toEntity());
+                .save(req.toEntity(businessKey, passwordUtils));
         }
     }
 
