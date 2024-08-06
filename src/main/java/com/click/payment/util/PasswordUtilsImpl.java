@@ -20,12 +20,12 @@ public class PasswordUtilsImpl implements PasswordUtils {
         return byteToHex(digest);
     }
 
-    public byte[] sha256(String rawData, byte[] salt) throws NoSuchAlgorithmException {
+    public byte[] sha256(String password, byte[] salt) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         digest.reset();
         digest.update(salt);
 
-        byte[] result = digest.digest(rawData.getBytes(StandardCharsets.UTF_8));
+        byte[] result = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
         result = digest.digest(result);
 
