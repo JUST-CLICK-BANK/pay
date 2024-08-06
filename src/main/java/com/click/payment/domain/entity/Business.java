@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +61,8 @@ public class Business {
 
     // B2B 비밀번호
     @Column(name = "BUSINESS_PASSWORD")
+    @Pattern(regexp = "^[a-z0-9]{4,}$",
+        message = "비밀번호는 영어와 숫자 포함해서 4자리 이상으로 입력해주세요.")
     private String businessPassword;
 
     @OneToMany(mappedBy = "businessId")

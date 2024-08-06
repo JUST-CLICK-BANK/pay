@@ -25,7 +25,7 @@ public class TestInitData {
             "1111111111",
             LocalDateTime.now(),
             false,
-            String.valueOf(1234),
+            "1234",
             paymentHistoriesTest,
             allowedRedirectsTest
         );

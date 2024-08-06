@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface BusinessService {
 
-    void registerBusiness(BusinessRequest businessRequest);
+    String registerBusiness(BusinessRequest businessRequest);
 
     BusinessResponse getBusiness(UUID businessId);
 
