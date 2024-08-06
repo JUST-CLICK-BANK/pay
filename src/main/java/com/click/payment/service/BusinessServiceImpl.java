@@ -1,7 +1,7 @@
 package com.click.payment.service;
 
-import com.click.payment.Util.GenerateApiKey;
-import com.click.payment.Util.PasswordUtils;
+import com.click.payment.util.GenerateApiKey;
+import com.click.payment.util.PasswordUtils;
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.BusinessRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;

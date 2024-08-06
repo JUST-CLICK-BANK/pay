@@ -1,4 +1,4 @@
-package com.click.payment.Util;
+package com.click.payment.util;
 
 public interface PasswordUtils {
     String passwordHashing(String password, String salt);

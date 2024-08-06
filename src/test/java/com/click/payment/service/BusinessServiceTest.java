@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.click.payment.TestInitData;
-import com.click.payment.Util.PasswordUtils;
+import com.click.payment.util.PasswordUtils;
 import com.click.payment.domain.dto.request.BusinessRequest;
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;
