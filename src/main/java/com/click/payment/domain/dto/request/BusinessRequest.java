@@ -1,16 +1,19 @@
 package com.click.payment.domain.dto.request;
 
+import com.click.payment.Util.PasswordUtils;
 import com.click.payment.domain.entity.Business;
 import java.time.LocalDateTime;
 
 public record BusinessRequest(
     String businessName,
     String businessCeo,
-    String businessKey,
-    String businessAccount
+    String businessAccount,
+    String businessPassword
 ) {
 
-    public Business toEntity() {
+    public Business toEntity(String businessKey, PasswordUtils passwordUtils) {
+        String salt = passwordUtils.generateSalt();
+
         return Business.builder()
             .businessId(null)
             .businessName(businessName)
@@ -19,7 +22,7 @@ public record BusinessRequest(
             .businessAccount(businessAccount)
             .businessCreateAt(LocalDateTime.now())
             .businessDisable(false)
-            .businessPassword(String.valueOf(1234))
+            .businessPassword(passwordUtils.passwordHashing(businessPassword, salt))
             .build();
     }
 }

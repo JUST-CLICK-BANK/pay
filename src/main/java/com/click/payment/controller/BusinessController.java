@@ -7,6 +7,7 @@ import com.click.payment.domain.dto.response.BusinessResponse;
 import com.click.payment.domain.entity.Business;
 import com.click.payment.service.AllowedRedirectService;
 import com.click.payment.service.BusinessService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -27,44 +28,71 @@ public class BusinessController {
     private final BusinessService businessService;
     private final AllowedRedirectService allowedRedirectService;
 
-    // 가맹점 정보 생성
+    /**
+     * 가맹점 정보를 생성합니다. (회원가입)
+     * @param businessRequest
+     */
     @PostMapping
-    public void registerBusiness(@RequestBody BusinessRequest businessRequest) {
-        businessService.registerBusiness(businessRequest);
+    public String registerBusiness(
+        @Valid
+        @RequestBody BusinessRequest businessRequest
+    ) {
+        return businessService.registerBusiness(businessRequest);
     }
 
-    // 가맹점 정보 조회
+    /**
+     * 가맹점 정보를 조회합니다. (조회 시, disable = true)
+     * @param businessId
+     * @return BusinessResponse
+     */
     @GetMapping("/{businessId}")
     public BusinessResponse getBusiness(@PathVariable("businessId") UUID businessId) {
         return businessService.getBusiness(businessId);
     }
 
-    // 가맹점 정보 수정
+    /**
+     * 가맹점 정보를 수정합니다.
+     * @param businessId
+     * @param updateBusinessRequest
+     */
     @PutMapping("/{businessId}")
     public void updateBusiness(@PathVariable("businessId") UUID businessId,
         @RequestBody UpdateBusinessRequest updateBusinessRequest) {
         businessService.updateBusinessInfo(businessId, updateBusinessRequest);
     }
 
-    // 가맹점 삭제
+    /**
+     * 가맹점의 정보를 disable = true로 수정합니다. (삭제)
+     * @param businessId
+     */
     @DeleteMapping("/{businessId}")
     public void deleteBusiness(@PathVariable("businessId") UUID businessId) {
         businessService.deleteBusiness(businessId);
     }
 
-    // 가맹점 리다이렉션 주소 생성
+    /**
+     * 가맹점에게 보낼 리다이렉션 URL을 생성합니다.
+     * @param redirectUrlRequest
+     */
     @PostMapping("/redirect")
     public void registerRedirectUrl(@RequestBody RedirectUrlRequest redirectUrlRequest) {
         allowedRedirectService.registerUrl(redirectUrlRequest);
     }
 
-    // 가맹점 리다이렉션 주소 조회
+    /**
+     * 가맹점의 리다이렉션 URL들을 조회합니다.
+     * @param businessId
+     * @return List<String>
+     */
     @GetMapping("/redirect/{businessId}")
     public List<String> getRedirectUrl(@PathVariable("businessId") UUID businessId) {
         return allowedRedirectService.getRedirectUrl(businessId);
     }
 
-    // 가맹점 리다이렉션 주소 삭제
+    /**
+     * 가맹점의 리다이렉션 URL을 삭제합니다.
+     * @param business
+     */
     @DeleteMapping("/redirect/{businessId}")
     public void deleteRedirectUrl(@PathVariable("businessId") Business business) {
         allowedRedirectService.deleteRedirectUrl(business);

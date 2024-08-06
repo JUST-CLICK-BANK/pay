@@ -1,5 +1,7 @@
 package com.click.payment.service;
 
+import com.click.payment.Util.GenerateApiKey;
+import com.click.payment.Util.PasswordUtils;
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.BusinessRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;
@@ -19,11 +21,14 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
 
     private final BusinessRepository businessRepository;
     private final AllowedRedirectRepository allowedRedirectRepository;
+    private final PasswordUtils passwordUtils;
 
     // 가맹점 등록
     @Override
-    public void registerBusiness(BusinessRequest businessRequest) {
-        businessRepository.save(businessRequest.toEntity());
+    public String registerBusiness(BusinessRequest businessRequest) {
+        String businessKey = new GenerateApiKey().generateApiKey();
+        businessRepository.save(businessRequest.toEntity(businessKey, passwordUtils));
+        return businessKey;
     }
 
     // 가맹점 조회
