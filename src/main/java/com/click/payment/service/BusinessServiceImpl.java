@@ -1,7 +1,7 @@
 package com.click.payment.service;
 
-import com.click.payment.util.GenerateApiKey;
-import com.click.payment.util.PasswordUtils;
+import com.click.payment.domain.dto.request.SignInRequest;
+import com.click.payment.domain.dto.response.SignInResponse;
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.BusinessRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;
@@ -9,6 +9,8 @@ import com.click.payment.domain.dto.response.BusinessResponse;
 import com.click.payment.domain.entity.Business;
 import com.click.payment.domain.repository.AllowedRedirectRepository;
 import com.click.payment.domain.repository.BusinessRepository;
+import com.click.payment.util.GenerateApiKey;
+import com.click.payment.util.PasswordUtils;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +31,25 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
         String businessKey = new GenerateApiKey().generateApiKey();
         businessRepository.save(businessRequest.toEntity(businessKey, passwordUtils));
         return businessKey;
+    }
+
+    // 로그인
+    @Override
+    public SignInResponse signInBusiness(SignInRequest signInRequest) {
+        // 가맹점 키
+        String businessKey = businessRepository.findByBusinessKey(signInRequest.businessKey());
+        // 가맹점 salt
+        String salt = businessRepository.findByBusinessSalt(signInRequest.businessKey());
+
+        // 입력한 비밀번호
+        String inputPassword = passwordUtils.passwordHashing(signInRequest.businessPassword(), salt);
+        // 가맹점 비밀번호
+        String businessPassword = businessRepository.findByBusinessPassword(businessKey);
+
+        if(businessKey == null || !inputPassword.equals(businessPassword))
+            throw new IllegalArgumentException("API Key 혹은 비밀번호가 틀렸습니다.");
+
+        return SignInResponse.from(businessKey, businessPassword);
     }
 
     // 가맹점 조회

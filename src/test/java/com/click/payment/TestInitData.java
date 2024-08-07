@@ -26,6 +26,7 @@ public class TestInitData {
             LocalDateTime.now(),
             false,
             "1234",
+            "salt",
             paymentHistoriesTest,
             allowedRedirectsTest
         );
