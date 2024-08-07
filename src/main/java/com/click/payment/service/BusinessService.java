@@ -6,12 +6,13 @@ import com.click.payment.domain.dto.request.UpdateBusinessRequest;
 import com.click.payment.domain.dto.response.BusinessResponse;
 import com.click.payment.domain.dto.response.SignInResponse;
 import java.util.UUID;
+import org.springframework.http.ResponseEntity;
 
 public interface BusinessService {
 
     String registerBusiness(BusinessRequest businessRequest);
 
-    SignInResponse signInBusiness(SignInRequest signInRequest);
+    UUID signInBusiness(SignInRequest signInRequest);
 
     BusinessResponse getBusiness(UUID businessId);
 
