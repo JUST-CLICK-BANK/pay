@@ -23,6 +23,7 @@ public record BusinessRequest(
             .businessCreateAt(LocalDateTime.now())
             .businessDisable(false)
             .businessPassword(passwordUtils.passwordHashing(businessPassword, salt))
+            .businessSalt(salt)
             .build();
     }
 }

@@ -48,4 +48,10 @@ public class PasswordUtilsImpl implements PasswordUtils {
         random.nextBytes(bytes);
         return byteToHex(bytes);
     }
+
+    public boolean verifyPassword(String inputPassword, String businessPassword, String salt) {
+        String hashedInputPassword = passwordHashing(inputPassword, salt);
+
+        return hashedInputPassword.equals(businessPassword);
+    }
 }

@@ -6,4 +6,6 @@ public interface PasswordUtils {
     String byteToHex(byte[] bytes);
 
     String generateSalt();
+
+    boolean verifyPassword(String inputPassword, String businessPassword, String salt);
 }
