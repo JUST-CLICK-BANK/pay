@@ -16,4 +16,7 @@ public interface BusinessRepository extends JpaRepository<Business, UUID> {
 
     @Query("SELECT b.businessSalt FROM Business b WHERE b.businessKey = :businessKey AND b.businessDisable = false")
     String findByBusinessSalt(String businessKey);
+
+    @Query("SELECT b.businessId FROM Business b WHERE b.businessKey = :businessKey AND b.businessDisable = false")
+    UUID findByBusinessId(String businessKey);
 }

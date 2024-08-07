@@ -41,13 +41,17 @@ public class PaymentHistoryController {
         return paymentHistoryService.getPaymentHistory(businessId, payId);
     }
 
-    // 결제 내역 생성
+    /**
+     * 가맹점이 Pay서버로 결제 데이터 생성 요청할 때 결제 내역을 생성합니다.
+     * @param business
+     * @param paymentHistoryRequest
+     */
     @PostMapping("/{businessId}")
     public void insertPaymentHistory(
         @PathVariable("businessId") Business business,
-        @RequestBody PaymentHistoryRequest req
+        @RequestBody PaymentHistoryRequest paymentHistoryRequest
     ) {
-        paymentHistoryService.insertPaymentHistory(business, req);
+        paymentHistoryService.insertPaymentHistory(business, paymentHistoryRequest);
     }
 
     // 결제 상태 수정

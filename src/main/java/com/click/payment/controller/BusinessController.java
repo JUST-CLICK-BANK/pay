@@ -47,10 +47,10 @@ public class BusinessController {
     /**
      * 가맹점 B2B 로그인
      * @param signInRequest
-     * @return ResponseEntity<SignInResponse>
+     * @return ResponseEntity<String>
      */
     @PostMapping("/signin")
-    public ResponseEntity<SignInResponse> signInBusiness(
+    public ResponseEntity<UUID> signInBusiness(
         @RequestBody SignInRequest signInRequest
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(businessService.signInBusiness(signInRequest));

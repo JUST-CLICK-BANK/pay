@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +36,7 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
 
     // 로그인
     @Override
-    public SignInResponse signInBusiness(SignInRequest signInRequest) {
+    public UUID signInBusiness(SignInRequest signInRequest) {
         // 가맹점 키
         String businessKey = businessRepository.findByBusinessKey(signInRequest.businessKey());
         // 가맹점 salt
@@ -49,7 +50,8 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
         if(businessKey == null || !inputPassword.equals(businessPassword))
             throw new IllegalArgumentException("API Key 혹은 비밀번호가 틀렸습니다.");
 
-        return SignInResponse.from(businessKey, businessPassword);
+        SignInResponse.from(businessKey, businessPassword);
+        return businessRepository.findByBusinessId(businessKey);
     }
 
     // 가맹점 조회
