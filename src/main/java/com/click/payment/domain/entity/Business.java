@@ -65,6 +65,10 @@ public class Business {
         message = "비밀번호는 영어와 숫자 포함해서 4자리 이상으로 입력해주세요.")
     private String businessPassword;
 
+    // 조미료
+    @Column(name = "BUSINESS_SALT")
+    private String businessSalt;
+
     @OneToMany(mappedBy = "businessId")
     private List<PaymentHistory> paymentHistories;
 

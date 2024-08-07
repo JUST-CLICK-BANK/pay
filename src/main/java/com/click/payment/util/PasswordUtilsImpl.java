@@ -1,4 +1,4 @@
-package com.click.payment.Util;
+package com.click.payment.util;
 
 import org.springframework.stereotype.Component;
 
@@ -20,12 +20,12 @@ public class PasswordUtilsImpl implements PasswordUtils {
         return byteToHex(digest);
     }
 
-    public byte[] sha256(String rawData, byte[] salt) throws NoSuchAlgorithmException {
+    public byte[] sha256(String password, byte[] salt) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         digest.reset();
         digest.update(salt);
 
-        byte[] result = digest.digest(rawData.getBytes(StandardCharsets.UTF_8));
+        byte[] result = digest.digest(password.getBytes(StandardCharsets.UTF_8));
 
         result = digest.digest(result);
 
@@ -47,5 +47,11 @@ public class PasswordUtilsImpl implements PasswordUtils {
         byte[] bytes = new byte[8];
         random.nextBytes(bytes);
         return byteToHex(bytes);
+    }
+
+    public boolean verifyPassword(String inputPassword, String businessPassword, String salt) {
+        String hashedInputPassword = passwordHashing(inputPassword, salt);
+
+        return hashedInputPassword.equals(businessPassword);
     }
 }

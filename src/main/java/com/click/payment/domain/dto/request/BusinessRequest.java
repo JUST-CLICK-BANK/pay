@@ -1,6 +1,6 @@
 package com.click.payment.domain.dto.request;
 
-import com.click.payment.Util.PasswordUtils;
+import com.click.payment.util.PasswordUtils;
 import com.click.payment.domain.entity.Business;
 import java.time.LocalDateTime;
 
@@ -23,6 +23,7 @@ public record BusinessRequest(
             .businessCreateAt(LocalDateTime.now())
             .businessDisable(false)
             .businessPassword(passwordUtils.passwordHashing(businessPassword, salt))
+            .businessSalt(salt)
             .build();
     }
 }

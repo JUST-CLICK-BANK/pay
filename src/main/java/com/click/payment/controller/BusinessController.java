@@ -2,8 +2,10 @@ package com.click.payment.controller;
 
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.BusinessRequest;
+import com.click.payment.domain.dto.request.SignInRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;
 import com.click.payment.domain.dto.response.BusinessResponse;
+import com.click.payment.domain.dto.response.SignInResponse;
 import com.click.payment.domain.entity.Business;
 import com.click.payment.service.AllowedRedirectService;
 import com.click.payment.service.BusinessService;
@@ -11,6 +13,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +42,18 @@ public class BusinessController {
         @RequestBody BusinessRequest businessRequest
     ) {
         return businessService.registerBusiness(businessRequest);
+    }
+
+    /**
+     * 가맹점 B2B 로그인
+     * @param signInRequest
+     * @return ResponseEntity<SignInResponse>
+     */
+    @PostMapping("/signin")
+    public ResponseEntity<SignInResponse> signInBusiness(
+        @RequestBody SignInRequest signInRequest
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(businessService.signInBusiness(signInRequest));
     }
 
     /**

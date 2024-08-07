@@ -1,4 +1,4 @@
-package com.click.payment.Util;
+package com.click.payment.util;
 
 public interface PasswordUtils {
     String passwordHashing(String password, String salt);
@@ -6,4 +6,6 @@ public interface PasswordUtils {
     String byteToHex(byte[] bytes);
 
     String generateSalt();
+
+    boolean verifyPassword(String inputPassword, String businessPassword, String salt);
 }

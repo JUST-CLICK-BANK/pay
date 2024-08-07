@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.click.payment.TestInitData;
-import com.click.payment.Util.PasswordUtils;
+import com.click.payment.domain.dto.request.SignInRequest;
+import com.click.payment.domain.dto.response.SignInResponse;
+import com.click.payment.util.PasswordUtils;
 import com.click.payment.domain.dto.request.BusinessRequest;
 import com.click.payment.domain.dto.request.RedirectUrlRequest;
 import com.click.payment.domain.dto.request.UpdateBusinessRequest;
@@ -67,6 +69,33 @@ class BusinessServiceTest extends TestInitData {
             // then
             Mockito.verify(businessRepository, Mockito.never())
                 .save(req.toEntity(businessKey, passwordUtils));
+        }
+    }
+
+    @Nested
+    class signInBusiness {
+        String businessKey = business.getBusinessKey();
+        String salt = business.getBusinessSalt();
+        SignInRequest req = new SignInRequest(
+            businessKey,
+            "1234"
+        );
+        String businessPassword = business.getBusinessPassword();
+
+        @Test
+        void 성공_로그인_성공함() {
+            // given
+            BDDMockito.given(businessRepository.findByBusinessKey(businessKey))
+                .willReturn(businessKey);
+            BDDMockito.given(businessRepository.findByBusinessSalt(businessKey))
+                .willReturn(salt);
+            BDDMockito.given(passwordUtils.passwordHashing(req.businessPassword(), salt))
+                .willReturn(businessPassword);
+            BDDMockito.given(businessRepository.findByBusinessPassword(businessKey))
+                .willReturn(businessPassword);
+
+            // when
+            businessService.signInBusiness(req);
         }
     }
 
