@@ -2,17 +2,22 @@ package com.click.payment.service;
 
 import com.click.payment.domain.dto.request.PaymentHistoryRequest;
 import com.click.payment.domain.dto.request.UpdatePaymentHistoryRequest;
+import com.click.payment.domain.dto.response.PayTokenResponse;
 import com.click.payment.domain.dto.response.PaymentHistoryResponse;
 import com.click.payment.domain.dto.response.SuccessPaymentResponse;
+import com.click.payment.domain.dto.response.LastStandCardResponse;
+import com.click.payment.domain.entity.LastStandCard;
 import com.click.payment.domain.entity.PaymentHistory;
 import com.click.payment.domain.entity.Business;
+import com.click.payment.domain.repository.LastStandCardRepository;
 import com.click.payment.domain.repository.PaymentHistoryRepository;
 import com.click.payment.domain.repository.BusinessRepository;
-import com.click.payment.utils.JwtUtil;
+import com.click.payment.utils.JwtUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +29,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final BusinessRepository businessRepository;
-    private final JwtUtil jwtUtil;
+    private final LastStandCardRepository lastStandCardRepository;
+    private final JwtUtils jwtUtils;
 
     // 전체 결제 내역 조회
     @Override
@@ -54,8 +60,9 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         PaymentHistory save = paymentHistoryRepository.save(req.toEntity(business));
         Long payId = save.getPayId();
+        Integer payAmount = save.getPayAmount();
 
-        String token = jwtUtil.generateToken(payId);
+        String token = jwtUtils.generateToken(payId, business.getBusinessName(), req.failRedirUrl(), req.successRedirUrl(), payAmount);
 
         String appLink = String.format("exp://192.168.0.16:8081/--/path/into/app/pay/%s", token);
         return SuccessPaymentResponse.from(payId, appLink);
@@ -73,5 +80,28 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             byBusinessIdAndPayId.setPayRefundAt(LocalDateTime.now());
 
         byBusinessIdAndPayId.setPayState(req.payState());
+    }
+
+    // payToken
+    @Override
+    public PayTokenResponse parsePayToken(String payToken) {
+        return jwtUtils.parsePayToken(payToken);
+    }
+
+    // userToken
+    @Override
+    public LastStandCardResponse getLastStandCard(String userToken) {
+        int code;
+
+        UUID userId = jwtUtils.parseUserToken(userToken);
+        LastStandCard card = lastStandCardRepository.findByUserId(userId);
+
+        if (card != null) {
+            code = 0;
+            return LastStandCardResponse.from(code, card);
+        } else {
+            code = 1;
+            return LastStandCardResponse.from(code);
+        }
     }
 }

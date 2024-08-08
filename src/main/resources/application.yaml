@@ -1,0 +1,17 @@
+#spring.application.name=pay
+spring:
+  application:
+    name: payment
+  datasource:
+    url: jdbc:mysql://localhost:3306/click_pay?&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  paySecret: e48aweF!%w3224(#@qzsdffga#QsfdfzVJSEt4aef345q25@!rfa3%@jaw!
+  userSecret: thisispublickeythisispublickeythisispublickeythisispublickey
+  expiration: 600000
