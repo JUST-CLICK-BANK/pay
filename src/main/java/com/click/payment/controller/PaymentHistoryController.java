@@ -68,7 +68,7 @@ public class PaymentHistoryController {
     }
 
     /**
-     * payToken을 파싱합니다. (payId, businessName, failRedirUrl, successRedirUrl)
+     * payToken을 파싱합니다. (payId, businessName, failRedirUrl, successRedirUrl, payAmount)
      * @param payToken
      * @return PayTokenResponse
      */
