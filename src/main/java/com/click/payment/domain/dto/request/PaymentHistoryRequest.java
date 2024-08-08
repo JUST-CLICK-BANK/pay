@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 
 public record PaymentHistoryRequest(
     Long payNum,
-    Integer payAmount
+    Integer payAmount,
+    String failRedirUrl,
+    String successRedirUrl
 ) {
     public PaymentHistory toEntity(Business business) {
         return PaymentHistory.builder()

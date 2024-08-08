@@ -41,7 +41,7 @@ public class PaymentHistory {
     // 금액 환불 시간
     @Column(name = "PAY_REFUND_AT")
     private LocalDateTime payRefundAt;
-    // 가맹점 ID
+    // 가맹점
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BUSINESS_ID")
     private Business business;
