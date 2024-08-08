@@ -44,7 +44,7 @@ public class PaymentHistory {
     // 가맹점 ID
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BUSINESS_ID")
-    private Business businessId;
+    private Business business;
 
     public void setPayState(PaymentState payState) {
         this.payState = payState;
