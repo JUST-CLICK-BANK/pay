@@ -2,26 +2,26 @@ package com.click.payment.controller;
 
 import com.click.payment.domain.dto.request.PaymentHistoryRequest;
 import com.click.payment.domain.dto.request.UpdatePaymentHistoryRequest;
+import com.click.payment.domain.dto.response.PayTokenResponse;
 import com.click.payment.domain.dto.response.PaymentHistoryResponse;
 import com.click.payment.domain.dto.response.SuccessPaymentResponse;
+import com.click.payment.domain.dto.response.LastStandCardResponse;
 import com.click.payment.domain.entity.PaymentHistory;
-import com.click.payment.domain.entity.Business;
 import com.click.payment.service.PaymentHistoryService;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/paymentHistories")
+@RequestMapping("/api/v1/payment-histories")
 public class PaymentHistoryController {
 
     private final PaymentHistoryService paymentHistoryService;
@@ -54,12 +54,43 @@ public class PaymentHistoryController {
         return paymentHistoryService.insertPaymentHistory(businessKey, paymentHistoryRequest);
     }
 
-    // 결제 상태 수정
+    /**
+     * 결제 내역 정보(카드, 결제 상태)를 수정합니다.
+     * @param payId
+     * @param updatePaymentHistoryRequest
+     */
     @PutMapping("/{payId}")
     public void updatePaymentHistoryState(
         @PathVariable("payId") Long payId,
-        @RequestBody UpdatePaymentHistoryRequest req
+        @RequestBody UpdatePaymentHistoryRequest updatePaymentHistoryRequest
     ) {
-        paymentHistoryService.updatePaymentHistoryState(payId, req);
+        paymentHistoryService.updatePaymentHistoryState(payId, updatePaymentHistoryRequest);
+    }
+
+    /**
+     * payToken을 파싱합니다. (payId, businessName, failRedirUrl, successRedirUrl)
+     * @param payToken
+     * @return PayTokenResponse
+     */
+    @GetMapping("/payToken")
+    public PayTokenResponse parsePayToken(
+        @RequestHeader("Authorization") String payToken
+    ) {
+        return paymentHistoryService.parsePayToken(payToken);
+    }
+
+    /**
+     * userToken을 파싱하고 (userId) <br/>
+     * 마지막 카드 결제를 반환해 줍니다. <br/>
+     * 성공 시 - code: 0, cardId: Long <br/>
+     * 실패 시 - code: 1, cardId: null
+     * @param userToken
+     * @return UserTokenResponse
+     */
+    @GetMapping("/card")
+    public LastStandCardResponse getUser(
+        @RequestHeader("Authorization") String userToken
+    ) {
+        return paymentHistoryService.getLastStandCard(userToken);
     }
 }
