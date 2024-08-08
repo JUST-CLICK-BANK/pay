@@ -33,5 +33,5 @@ public class AllowedRedirect {
 
     @ManyToOne
     @JoinColumn(name = "BUSINESS_ID")
-    private Business businessId;
+    private Business business;
 }

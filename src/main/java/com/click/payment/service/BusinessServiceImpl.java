@@ -9,13 +9,12 @@ import com.click.payment.domain.dto.response.BusinessResponse;
 import com.click.payment.domain.entity.Business;
 import com.click.payment.domain.repository.AllowedRedirectRepository;
 import com.click.payment.domain.repository.BusinessRepository;
-import com.click.payment.util.GenerateApiKey;
-import com.click.payment.util.PasswordUtils;
+import com.click.payment.utils.GenerateApiKey;
+import com.click.payment.utils.PasswordUtils;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,7 +50,7 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
             throw new IllegalArgumentException("API Key 혹은 비밀번호가 틀렸습니다.");
 
         SignInResponse.from(businessKey, businessPassword);
-        return businessRepository.findByBusinessId(businessKey);
+        return businessRepository.getByBusinessId(businessKey);
     }
 
     // 가맹점 조회

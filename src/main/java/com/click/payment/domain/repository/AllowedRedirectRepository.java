@@ -10,10 +10,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface AllowedRedirectRepository extends JpaRepository<AllowedRedirect, Long> {
 
-    @Query("SELECT r.redirUrl FROM AllowedRedirect r WHERE r.businessId=:business")
+    @Query("SELECT r.redirUrl FROM AllowedRedirect r WHERE r.business = :business")
     List<String> findRedirectUrlByBusinessId(Business business);
 
     @Modifying
-    @Query("DELETE FROM AllowedRedirect r WHERE r.businessId = :business")
+    @Query("DELETE FROM AllowedRedirect r WHERE r.business = :business")
     void deleteByBusinessId(@Param("business") Business business);
 }

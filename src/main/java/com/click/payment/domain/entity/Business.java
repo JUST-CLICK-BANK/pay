@@ -69,10 +69,10 @@ public class Business {
     @Column(name = "BUSINESS_SALT")
     private String businessSalt;
 
-    @OneToMany(mappedBy = "businessId")
+    @OneToMany(mappedBy = "business")
     private List<PaymentHistory> paymentHistories;
 
-    @OneToMany(mappedBy = "businessId")
+    @OneToMany(mappedBy = "business")
     private List<AllowedRedirect> allowedRedirects;
 
     public void updateInfo(UpdateBusinessRequest updateBusinessRequest) {

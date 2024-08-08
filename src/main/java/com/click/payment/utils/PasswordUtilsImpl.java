@@ -1,4 +1,4 @@
-package com.click.payment.util;
+package com.click.payment.utils;
 
 import org.springframework.stereotype.Component;
 
@@ -47,11 +47,5 @@ public class PasswordUtilsImpl implements PasswordUtils {
         byte[] bytes = new byte[8];
         random.nextBytes(bytes);
         return byteToHex(bytes);
-    }
-
-    public boolean verifyPassword(String inputPassword, String businessPassword, String salt) {
-        String hashedInputPassword = passwordHashing(inputPassword, salt);
-
-        return hashedInputPassword.equals(businessPassword);
     }
 }

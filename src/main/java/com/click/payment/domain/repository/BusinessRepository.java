@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BusinessRepository extends JpaRepository<Business, UUID> {
     Business findByBusinessIdAndBusinessDisableIsFalse(UUID businessId);
+    Business findByBusinessKeyAndBusinessDisableIsFalse(String businessKey);
 
     @Query("SELECT b.businessKey FROM Business b WHERE b.businessKey = :businessKey AND b.businessDisable = false")
     String findByBusinessKey(String businessKey);
@@ -18,5 +19,5 @@ public interface BusinessRepository extends JpaRepository<Business, UUID> {
     String findByBusinessSalt(String businessKey);
 
     @Query("SELECT b.businessId FROM Business b WHERE b.businessKey = :businessKey AND b.businessDisable = false")
-    UUID findByBusinessId(String businessKey);
+    UUID getByBusinessId(String businessKey);
 }
