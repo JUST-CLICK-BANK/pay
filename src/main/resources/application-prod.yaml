@@ -12,5 +12,6 @@ spring:
     show-sql: true
 
 jwt:
-  secret: ${secret}
+  paySecret: ${paySecret}
+  userSecret: ${userSecret}
   expiration: ${expiration}
