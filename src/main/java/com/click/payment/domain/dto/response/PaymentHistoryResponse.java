@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record PaymentHistoryResponse(
     Long payId,
-    UUID businessId,
+    String businessKey,
     Long cardId,
     Long payNum,
     Integer payAmount,
@@ -18,7 +18,7 @@ public record PaymentHistoryResponse(
     public static PaymentHistoryResponse from(PaymentHistory paymentHistory) {
         return new PaymentHistoryResponse(
             paymentHistory.getPayId(),
-            paymentHistory.getBusinessId().getBusinessId(),
+            paymentHistory.getBusiness().getBusinessKey(),
             paymentHistory.getCardId(),
             paymentHistory.getPayNum(),
             paymentHistory.getPayAmount(),

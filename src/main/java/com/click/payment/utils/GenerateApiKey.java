@@ -1,4 +1,4 @@
-package com.click.payment.util;
+package com.click.payment.utils;
 
 import java.util.Random;
 

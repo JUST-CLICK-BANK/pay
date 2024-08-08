@@ -11,7 +11,7 @@ public record RedirectUrlRequest(
     public AllowedRedirect toEntity(Business business) {
         return AllowedRedirect.builder()
             .redirId(null)
-            .businessId(business)
+            .business(business)
             .redirUrl(redirUrl)
             .build();
     }
