@@ -21,7 +21,7 @@ public record BusinessRequest(
             .businessKey(businessKey)
             .businessAccount(businessAccount)
             .businessCreateAt(LocalDateTime.now())
-            .businessDisable(false)
+            .businessAble(true)
             .businessPassword(passwordUtils.passwordHashing(businessPassword, salt))
             .businessSalt(salt)
             .build();

@@ -55,9 +55,9 @@ public class Business {
     private LocalDateTime businessCreateAt;
 
     // 사용 여부
-    @Column(name = "BUSINESS_DISABLE")
+    @Column(name = "BUSINESS_ABLE")
     @Setter
-    private boolean businessDisable;
+    private boolean businessAble;
 
     // B2B 비밀번호
     @Column(name = "BUSINESS_PASSWORD")
@@ -70,9 +70,11 @@ public class Business {
     private String businessSalt;
 
     @OneToMany(mappedBy = "business")
+    // TODO response 만들어서 필요한 데이터만 반환하기~
     private List<PaymentHistory> paymentHistories;
 
     @OneToMany(mappedBy = "business")
+    // TODO response 만들어서 필요한 데이터만 반환하기~
     private List<AllowedRedirect> allowedRedirects;
 
     public void updateInfo(UpdateBusinessRequest updateBusinessRequest) {

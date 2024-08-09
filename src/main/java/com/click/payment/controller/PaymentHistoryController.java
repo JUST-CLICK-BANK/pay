@@ -58,14 +58,15 @@ public class PaymentHistoryController {
      * 결제 내역 정보(카드, 결제 상태)를 수정합니다.
      * @param payId
      * @param updatePaymentHistoryRequest
+     * @return String
      */
     @PutMapping("/{payId}")
-    public void updatePaymentHistoryState(
+    public String updatePaymentHistoryState(
         @RequestHeader("Authorization") String userToken,
         @PathVariable("payId") Long payId,
         @RequestBody UpdatePaymentHistoryRequest updatePaymentHistoryRequest
     ) {
-        paymentHistoryService.updatePaymentHistoryState(userToken, payId, updatePaymentHistoryRequest);
+       return paymentHistoryService.updatePaymentHistoryState(userToken, payId, updatePaymentHistoryRequest);
     }
 
     /**
