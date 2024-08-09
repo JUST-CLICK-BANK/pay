@@ -5,6 +5,7 @@ import com.click.payment.domain.type.PaymentState;
 import java.time.LocalDateTime;
 
 public record UpdatePaymentHistoryRequest(
+        String account,
         Long cardId,
         PaymentState payState
 ) {

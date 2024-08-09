@@ -56,7 +56,7 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
     // 가맹점 조회
     @Override
     public BusinessResponse getBusiness(UUID businessId) {
-        Business byBusiness = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(
+        Business byBusiness = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(
             businessId);
         return BusinessResponse.from(byBusiness);
     }
@@ -65,7 +65,7 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
     @Override
     @Transactional
     public void updateBusinessInfo(UUID businessId, UpdateBusinessRequest updateBusinessRequest) {
-        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId);
+        Business byId = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(businessId);
         if(byId.getBusinessId() == null)
             throw new IllegalArgumentException("Business not found");
 
@@ -76,17 +76,17 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
     @Override
     @Transactional
     public void deleteBusiness(UUID businessId) {
-        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId);
+        Business byId = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(businessId);
         if(byId.getBusinessId() == null)
             throw new IllegalArgumentException("Business not found");
 
-        byId.setBusinessDisable(true);
+        byId.setBusinessAble(false);
     }
 
     // Redirect Url 등록
     @Override
     public void registerUrl(RedirectUrlRequest redirectUrlRequest) {
-        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(UUID.fromString(redirectUrlRequest.businessId()));
+        Business byId = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(UUID.fromString(redirectUrlRequest.businessId()));
         if(byId.getBusinessId() == null)
             throw new NullPointerException("Business not found");
 
@@ -96,7 +96,7 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
     // Redirect Url 조회
     @Override
     public List<String> getRedirectUrl(UUID businessId) {
-        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(businessId);
+        Business byId = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(businessId);
         if(byId.getBusinessId() == null)
             throw new NullPointerException("Business not found");
 
@@ -107,7 +107,7 @@ public class BusinessServiceImpl implements BusinessService, AllowedRedirectServ
     @Override
     @Transactional
     public void deleteRedirectUrl(Business business) {
-        Business byId = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(business.getBusinessId());
+        Business byId = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(business.getBusinessId());
         if(byId.getBusinessId() == null)
             throw new NullPointerException("Business not found");
 
