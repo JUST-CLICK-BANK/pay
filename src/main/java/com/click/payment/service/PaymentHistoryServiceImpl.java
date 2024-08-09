@@ -12,12 +12,16 @@ import com.click.payment.domain.entity.Business;
 import com.click.payment.domain.repository.LastStandCardRepository;
 import com.click.payment.domain.repository.PaymentHistoryRepository;
 import com.click.payment.domain.repository.BusinessRepository;
+import com.click.payment.domain.type.PaymentState;
+import com.click.payment.global.api.ApiAccount;
+import com.click.payment.global.api.ApiCard;
+import com.click.payment.global.dto.AccountResponse;
+import com.click.payment.global.dto.CardResponse;
 import com.click.payment.utils.JwtUtils;
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,11 +35,13 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     private final BusinessRepository businessRepository;
     private final LastStandCardRepository lastStandCardRepository;
     private final JwtUtils jwtUtils;
+    private final ApiCard apiCard;
+    private final ApiAccount apiAccount;
 
     // 전체 결제 내역 조회
     @Override
     public List<PaymentHistory> getPaymentHistories(String businessKey) {
-        Business byBusinessId = businessRepository.findByBusinessKeyAndBusinessDisableIsFalse(businessKey);
+        Business byBusinessId = businessRepository.findByBusinessKeyAndBusinessAbleIsTrue(businessKey);
         if(byBusinessId.getBusinessId() == null) throw new NullPointerException("가맹점 오류");
 
         return paymentHistoryRepository.findByBusiness(byBusinessId);
@@ -51,11 +57,11 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     // 결제 내역 생성
     @Override
     public SuccessPaymentResponse insertPaymentHistory(String businessKey, PaymentHistoryRequest req) {
-        Business byBusinessKey = businessRepository.findByBusinessKeyAndBusinessDisableIsFalse(businessKey);
+        Business byBusinessKey = businessRepository.findByBusinessKeyAndBusinessAbleIsTrue(businessKey);
         if(byBusinessKey.getBusinessId() == null) throw new NullPointerException("가맹점 오류");
 
         UUID byBusinessId = businessRepository.getByBusinessId(businessKey);
-        Business business = businessRepository.findByBusinessIdAndBusinessDisableIsFalse(
+        Business business = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(
             byBusinessId);
 
         PaymentHistory save = paymentHistoryRepository.save(req.toEntity(business));
@@ -71,7 +77,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     // 결제 상태 수정
     @Override
     @Transactional
-    public void updatePaymentHistoryState(String userToken, Long payId, UpdatePaymentHistoryRequest req) {
+    public String updatePaymentHistoryState(String userToken, Long payId, UpdatePaymentHistoryRequest req) {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
         if(byBusinessIdAndPayId.getPayId() == null) throw new NullPointerException("결제내역 오류");
 
@@ -79,23 +85,35 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         UUID userId = jwtUtils.parseUserToken(userToken);
 
         // 카드 유효성 검사
+        Map<String, String> card = new HashMap<>();
+        String query = String.format("{getMyCard(%s){cardAble}}", req.cardId());
+        card.put("query", query);
 
-
-        // 마지막 결제 카드 저장
-        LastStandCard lastStandCard = new LastStandCard(userId, req.cardId());
-        lastStandCardRepository.save(lastStandCard);
+        CardResponse myCard = apiCard.getMyCard(card);
+        if(!myCard.cardAble()) {
+            // 카드 유효 여부가 false일 경우
+            byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
+            return "결제 실패";
+        }
 
         // 계좌 유효성 검사
-
-
-        // 환불 완료일 경우 환불 시간 업데이트
-        if(Objects.equals(req.payState().toString(), "REFUND_COMPLETE"))
-            byBusinessIdAndPayId.setPayRefundAt(LocalDateTime.now());
+        AccountResponse accountAmount = apiAccount.getAccountAmount(req.account());
+        if(byBusinessIdAndPayId.getPayAmount() > accountAmount.accMoneyAmount()
+        || !accountAmount.accAble()) {
+            // 계좌 금액이 부족할 경우 혹은 유효 여부가 false일 경우
+            byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
+            return "결제 실패";
+        }
 
         // 상태 업데이트
         byBusinessIdAndPayId.setPayState(req.payState());
         // 결제 카드 업데이트
         byBusinessIdAndPayId.setCardId(req.cardId());
+        // 마지막 결제 카드 저장
+        LastStandCard lastStandCard = new LastStandCard(userId, req.cardId());
+        lastStandCardRepository.save(lastStandCard);
+
+        return "결제 완료";
     }
 
     // payToken
