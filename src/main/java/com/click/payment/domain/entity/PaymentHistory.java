@@ -52,4 +52,7 @@ public class PaymentHistory {
     public void setPayRefundAt(LocalDateTime payRefundAt) {
         this.payRefundAt = payRefundAt;
     }
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
+    }
 }

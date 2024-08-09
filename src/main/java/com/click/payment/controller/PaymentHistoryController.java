@@ -72,7 +72,7 @@ public class PaymentHistoryController {
      * @param payToken
      * @return PayTokenResponse
      */
-    @GetMapping("/payToken")
+    @GetMapping("/pay-token")
     public PayTokenResponse parsePayToken(
         @RequestHeader("Authorization") String payToken
     ) {
@@ -87,10 +87,12 @@ public class PaymentHistoryController {
      * @param userToken
      * @return UserTokenResponse
      */
-    @GetMapping("/card")
+    @GetMapping("/last-card")
     public LastStandCardResponse getUser(
         @RequestHeader("Authorization") String userToken
     ) {
         return paymentHistoryService.getLastStandCard(userToken);
     }
+
+
 }
