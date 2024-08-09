@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface PaymentHistoryService {
     // 전체 결제 내역 조회
-    List<PaymentHistory> getPaymentHistories(String businessKey);
+    List<PaymentHistoryResponse> getPaymentHistories(String businessKey);
 
     // 특정 결제 내역 조회 (단일)
     PaymentHistoryResponse getPaymentHistory(Long payId);
