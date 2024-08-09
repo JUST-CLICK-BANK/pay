@@ -27,7 +27,7 @@ public class PaymentHistoryController {
     private final PaymentHistoryService paymentHistoryService;
 
     // 전체 결제 내역 조회
-    @GetMapping("/{businessKey}")
+    @GetMapping("/all/{businessKey}")
     public List<PaymentHistory> getPaymentHistories(
         @PathVariable("businessKey") String businessKey
     ) {
@@ -61,10 +61,11 @@ public class PaymentHistoryController {
      */
     @PutMapping("/{payId}")
     public void updatePaymentHistoryState(
+        @RequestHeader("Authorization") String userToken,
         @PathVariable("payId") Long payId,
         @RequestBody UpdatePaymentHistoryRequest updatePaymentHistoryRequest
     ) {
-        paymentHistoryService.updatePaymentHistoryState(payId, updatePaymentHistoryRequest);
+        paymentHistoryService.updatePaymentHistoryState(userToken, payId, updatePaymentHistoryRequest);
     }
 
     /**
@@ -93,6 +94,4 @@ public class PaymentHistoryController {
     ) {
         return paymentHistoryService.getLastStandCard(userToken);
     }
-
-
 }

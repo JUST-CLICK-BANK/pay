@@ -71,16 +71,21 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     // 결제 상태 수정
     @Override
     @Transactional
-    public void updatePaymentHistoryState(Long payId, UpdatePaymentHistoryRequest req) {
+    public void updatePaymentHistoryState(String userToken, Long payId, UpdatePaymentHistoryRequest req) {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
         if(byBusinessIdAndPayId.getPayId() == null) throw new NullPointerException("결제내역 오류");
 
-        // 카드 유효성 검사
-        
+        // userToken
+        UUID userId = jwtUtils.parseUserToken(userToken);
 
+        // 카드 유효성 검사
+
+
+        // 마지막 결제 카드 저장
+        LastStandCard lastStandCard = new LastStandCard(userId, req.cardId());
+        lastStandCardRepository.save(lastStandCard);
 
         // 계좌 유효성 검사
-
 
 
         // 환불 완료일 경우 환불 시간 업데이트
@@ -109,10 +114,10 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         if (card != null) {
             code = 0;
-            return LastStandCardResponse.from(userId, code, card);
+            return LastStandCardResponse.from(code, card);
         } else {
             code = 1;
-            return LastStandCardResponse.from(userId, code);
+            return LastStandCardResponse.from(code);
         }
     }
 }

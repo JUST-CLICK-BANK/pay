@@ -21,7 +21,7 @@ public interface PaymentHistoryService {
     SuccessPaymentResponse insertPaymentHistory(String businessKey, PaymentHistoryRequest req);
 
     // 결제 상태 수정
-    void updatePaymentHistoryState(Long payId, UpdatePaymentHistoryRequest req);
+    void updatePaymentHistoryState(String userToken, Long payId, UpdatePaymentHistoryRequest req);
 
     // payToken
     PayTokenResponse parsePayToken(String payToken);
