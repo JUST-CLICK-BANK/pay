@@ -75,11 +75,22 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
         if(byBusinessIdAndPayId.getPayId() == null) throw new NullPointerException("결제내역 오류");
 
-        // TODO cardId도 추가
+        // 카드 유효성 검사
+        
+
+
+        // 계좌 유효성 검사
+
+
+
+        // 환불 완료일 경우 환불 시간 업데이트
         if(Objects.equals(req.payState().toString(), "REFUND_COMPLETE"))
             byBusinessIdAndPayId.setPayRefundAt(LocalDateTime.now());
 
+        // 상태 업데이트
         byBusinessIdAndPayId.setPayState(req.payState());
+        // 결제 카드 업데이트
+        byBusinessIdAndPayId.setCardId(req.cardId());
     }
 
     // payToken
@@ -98,10 +109,10 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         if (card != null) {
             code = 0;
-            return LastStandCardResponse.from(code, card);
+            return LastStandCardResponse.from(userId, code, card);
         } else {
             code = 1;
-            return LastStandCardResponse.from(code);
+            return LastStandCardResponse.from(userId, code);
         }
     }
 }
