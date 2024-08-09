@@ -57,7 +57,7 @@ public class BusinessController {
     }
 
     /**
-     * 가맹점 정보를 조회합니다. (조회 시, disable = true)
+     * 가맹점 정보를 조회합니다. (조회 시, able = true)
      * @param businessId
      * @return BusinessResponse
      */

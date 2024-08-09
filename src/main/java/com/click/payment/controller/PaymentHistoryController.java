@@ -28,7 +28,7 @@ public class PaymentHistoryController {
 
     // 전체 결제 내역 조회
     @GetMapping("/all/{businessKey}")
-    public List<PaymentHistory> getPaymentHistories(
+    public List<PaymentHistoryResponse> getPaymentHistories(
         @PathVariable("businessKey") String businessKey
     ) {
         return paymentHistoryService.getPaymentHistories(businessKey);

@@ -40,11 +40,15 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
     // 전체 결제 내역 조회
     @Override
-    public List<PaymentHistory> getPaymentHistories(String businessKey) {
-        Business byBusinessId = businessRepository.findByBusinessKeyAndBusinessAbleIsTrue(businessKey);
-        if(byBusinessId.getBusinessId() == null) throw new NullPointerException("가맹점 오류");
+    public List<PaymentHistoryResponse> getPaymentHistories(String businessKey) {
+        Business byBusinessId = businessRepository.findByBusinessKeyAndBusinessAbleIsTrue(
+            businessKey);
+        if (byBusinessId.getBusinessId() == null) {
+            throw new NullPointerException("가맹점 오류");
+        }
 
-        return paymentHistoryRepository.findByBusiness(byBusinessId);
+        return paymentHistoryRepository.findByBusiness_businessId(byBusinessId.getBusinessId())
+            .stream().map(PaymentHistoryResponse::from).toList();
     }
 
     // 특정 결제 내역 조회 (단일)
@@ -56,9 +60,13 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
     // 결제 내역 생성
     @Override
-    public SuccessPaymentResponse insertPaymentHistory(String businessKey, PaymentHistoryRequest req) {
-        Business byBusinessKey = businessRepository.findByBusinessKeyAndBusinessAbleIsTrue(businessKey);
-        if(byBusinessKey.getBusinessId() == null) throw new NullPointerException("가맹점 오류");
+    public SuccessPaymentResponse insertPaymentHistory(String businessKey,
+        PaymentHistoryRequest req) {
+        Business byBusinessKey = businessRepository.findByBusinessKeyAndBusinessAbleIsTrue(
+            businessKey);
+        if (byBusinessKey.getBusinessId() == null) {
+            throw new NullPointerException("가맹점 오류");
+        }
 
         UUID byBusinessId = businessRepository.getByBusinessId(businessKey);
         Business business = businessRepository.findByBusinessIdAndBusinessAbleIsTrue(
@@ -68,7 +76,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         Long payId = save.getPayId();
         Integer payAmount = save.getPayAmount();
 
-        String token = jwtUtils.generateToken(payId, business.getBusinessName(), req.failRedirUrl(), req.successRedirUrl(), payAmount);
+        String token = jwtUtils.generateToken(payId, business.getBusinessName(), req.failRedirUrl(),
+            req.successRedirUrl(), payAmount);
 
         String appLink = String.format("exp://192.168.0.16:8081/--/path/into/app/pay/%s", token);
         return SuccessPaymentResponse.from(payId, appLink);
@@ -77,9 +86,12 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     // 결제 상태 수정
     @Override
     @Transactional
-    public String updatePaymentHistoryState(String userToken, Long payId, UpdatePaymentHistoryRequest req) {
+    public String updatePaymentHistoryState(String userToken, Long payId,
+        UpdatePaymentHistoryRequest req) {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
-        if(byBusinessIdAndPayId.getPayId() == null) throw new NullPointerException("결제내역 오류");
+        if (byBusinessIdAndPayId.getPayId() == null) {
+            throw new NullPointerException("결제내역 오류");
+        }
 
         // userToken
         UUID userId = jwtUtils.parseUserToken(userToken);
@@ -90,7 +102,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         card.put("query", query);
 
         CardResponse myCard = apiCard.getMyCard(card);
-        if(!myCard.cardAble()) {
+        if (!myCard.cardAble()) {
             // 카드 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
             return "결제 실패";
@@ -98,8 +110,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         // 계좌 유효성 검사
         AccountResponse accountAmount = apiAccount.getAccountAmount(req.account());
-        if(byBusinessIdAndPayId.getPayAmount() > accountAmount.accMoneyAmount()
-        || !accountAmount.accAble()) {
+        if (byBusinessIdAndPayId.getPayAmount() > accountAmount.accMoneyAmount()
+            || !accountAmount.accAble()) {
             // 계좌 금액이 부족할 경우 혹은 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
             return "결제 실패";
