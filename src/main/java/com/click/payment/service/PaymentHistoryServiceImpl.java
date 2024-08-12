@@ -108,7 +108,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 //        }
 
         // 계좌 유효성 검사
-        AccountAmountResponse accountAmount = apiAccount.getAccountAmount(userToken, req.account());
+        AccountAmountResponse accountAmount = apiAccount.getAccountAmount(req.account());
         if (byBusinessIdAndPayId.getPayAmount() > accountAmount.amount()
             || !accountAmount.accountAble()) {
             // 계좌 금액이 부족할 경우 혹은 유효 여부가 false일 경우

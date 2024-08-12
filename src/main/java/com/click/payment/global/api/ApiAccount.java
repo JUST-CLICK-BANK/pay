@@ -12,8 +12,8 @@ public class ApiAccount {
     public final FeignAccount feignAccount;
 
     @Async
-    public AccountAmountResponse getAccountAmount(String userToken, String account) {
-        return feignAccount.getAccountAmount(userToken, account);
+    public AccountAmountResponse getAccountAmount(String account) {
+        return feignAccount.getAccountAmount(account);
     }
 
     @Async
