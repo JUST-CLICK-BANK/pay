@@ -104,7 +104,10 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         String query = String.format("query { getMyCard(cardId: %s) { cardAble } }", req.cardId());
         card.put("query", query);
 
+        System.out.println("cardId: " + req.cardId());
+        System.out.println("card: " + card);
         CardResponse myCard = apiCard.getMyCard(card);
+        System.out.println("myCard: " + myCard.toString());
         if (!myCard.cardAble()) {
             // 카드 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
