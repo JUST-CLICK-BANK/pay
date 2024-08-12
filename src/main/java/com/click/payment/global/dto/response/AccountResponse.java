@@ -1,4 +1,4 @@
-package com.click.payment.global.dto;
+package com.click.payment.global.dto.response;
 
 public record AccountResponse(
     Long accMoneyAmount,

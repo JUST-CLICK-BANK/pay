@@ -1,6 +1,6 @@
 package com.click.payment.global.api;
 
-import com.click.payment.global.dto.CardResponse;
+import com.click.payment.global.dto.response.CardResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
