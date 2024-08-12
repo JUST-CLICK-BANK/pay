@@ -101,7 +101,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         // 카드 유효성 검사
         Map<String, String> card = new HashMap<>();
-        String query = String.format("{getMyCard(%s){cardAble}}", req.cardId());
+        String query = String.format("query { getMyCard(cardId: %s) { cardAble } }", req.cardId());
         card.put("query", query);
 
         CardResponse myCard = apiCard.getMyCard(card);
