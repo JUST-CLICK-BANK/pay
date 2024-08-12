@@ -15,9 +15,11 @@ import com.click.payment.domain.repository.BusinessRepository;
 import com.click.payment.domain.type.PaymentState;
 import com.click.payment.global.api.ApiAccount;
 import com.click.payment.global.api.ApiCard;
-import com.click.payment.global.dto.AccountResponse;
-import com.click.payment.global.dto.CardResponse;
+import com.click.payment.global.dto.request.UpdateMoneyRequest;
+import com.click.payment.global.dto.response.AccountResponse;
+import com.click.payment.global.dto.response.CardResponse;
 import com.click.payment.utils.JwtUtils;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -74,7 +76,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         PaymentHistory save = paymentHistoryRepository.save(req.toEntity(business));
         Long payId = save.getPayId();
-        Integer payAmount = save.getPayAmount();
+        Long payAmount = save.getPayAmount();
 
         String token = jwtUtils.generateToken(payId, business.getBusinessName(), req.failRedirUrl(),
             req.successRedirUrl(), payAmount);
@@ -89,6 +91,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     public String updatePaymentHistoryState(String userToken, Long payId,
         UpdatePaymentHistoryRequest req) {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
+
         if (byBusinessIdAndPayId.getPayId() == null) {
             throw new NullPointerException("결제내역 오류");
         }
@@ -125,6 +128,22 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         LastStandCard lastStandCard = new LastStandCard(userId, req.cardId());
         lastStandCardRepository.save(lastStandCard);
 
+        // 계좌 연동 (가맹점)
+        UpdateMoneyRequest businessUpdateMoneyReq = new UpdateMoneyRequest(
+            "deposit",
+            byBusinessIdAndPayId.getBusiness().getBusinessAccount(),
+            byBusinessIdAndPayId.getPayAmount(),
+    9
+        );
+        apiAccount.updateMoney(businessUpdateMoneyReq);
+        // 계좌 연동 (고객)
+        UpdateMoneyRequest customerUpdateMoneyReq = new UpdateMoneyRequest(
+            "transfer",
+            req.account(),
+            byBusinessIdAndPayId.getPayAmount(),
+            3
+        );
+
         return "결제 완료";
     }
 
@@ -149,5 +168,24 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             code = 1;
             return LastStandCardResponse.from(code);
         }
+    }
+
+    @Override
+    public String cancelPaymentHistory(Long payId) {
+        PaymentHistory byPayId = paymentHistoryRepository.findByPayId(payId);
+
+        byPayId.setPayState(PaymentState.valueOf("PAY_CANCEL"));
+
+        return "결제 취소";
+    }
+
+    @Override
+    public String refundPaymentHistory(Long payId) {
+        PaymentHistory byPayId = paymentHistoryRepository.findByPayId(payId);
+
+        byPayId.setPayState(PaymentState.valueOf("REFUND_COMPLETE"));
+        byPayId.setPayRefundAt(LocalDateTime.now());
+
+        return "환불 완료";
     }
 }

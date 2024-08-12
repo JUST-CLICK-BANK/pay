@@ -28,4 +28,10 @@ public interface PaymentHistoryService {
 
     // userToken
     LastStandCardResponse getLastStandCard(String userToken);
+
+    // 결제 취소
+    String cancelPaymentHistory(Long payId);
+
+    // 환불
+    String refundPaymentHistory(Long payId);
 }

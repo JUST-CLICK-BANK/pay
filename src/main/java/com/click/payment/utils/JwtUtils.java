@@ -27,7 +27,7 @@ public class JwtUtils {
         this.expiration = expiration;
     }
 
-    public String generateToken(Long payId, String businessName, String failRedirUrl, String successRedirUrl, Integer payAmount){
+    public String generateToken(Long payId, String businessName, String failRedirUrl, String successRedirUrl, Long payAmount){
         return Jwts.builder()
             .subject(String.valueOf(payId))
             .claim("payId", payId)
@@ -51,7 +51,7 @@ public class JwtUtils {
         String businessName = payload.get("businessName", String.class);
         String failRedirUrl = payload.get("failRedirUrl", String.class);
         String successRedirUrl = payload.get("successRedirUrl", String.class);
-        Integer payAmount = payload.get("payAmount", Integer.class);
+        Long payAmount = payload.get("payAmount", Long.class);
 
         return PayTokenResponse.from(payId, businessName, failRedirUrl, successRedirUrl, payAmount);
     }

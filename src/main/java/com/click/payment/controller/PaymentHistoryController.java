@@ -9,6 +9,7 @@ import com.click.payment.domain.dto.response.LastStandCardResponse;
 import com.click.payment.domain.entity.PaymentHistory;
 import com.click.payment.service.PaymentHistoryService;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -66,7 +68,7 @@ public class PaymentHistoryController {
         @PathVariable("payId") Long payId,
         @RequestBody UpdatePaymentHistoryRequest updatePaymentHistoryRequest
     ) {
-       return paymentHistoryService.updatePaymentHistoryState(userToken, payId, updatePaymentHistoryRequest);
+        return paymentHistoryService.updatePaymentHistoryState(userToken, payId, updatePaymentHistoryRequest);
     }
 
     /**
@@ -94,5 +96,19 @@ public class PaymentHistoryController {
         @RequestHeader("Authorization") String userToken
     ) {
         return paymentHistoryService.getLastStandCard(userToken);
+    }
+
+    @PutMapping("/{payId}/cancel")
+    public String cancelPaymentHistory(
+        @PathVariable("payId") Long payId
+    ) {
+        return paymentHistoryService.cancelPaymentHistory(payId);
+    }
+
+    @PutMapping("/{payId}/refund")
+    public String refundPaymentHistory(
+        @PathVariable("payId") Long payId
+    ) {
+        return paymentHistoryService.refundPaymentHistory(payId);
     }
 }

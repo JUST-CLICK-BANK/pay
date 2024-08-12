@@ -9,7 +9,7 @@ public record PaymentHistoryResponse(
     Long payId,
     Long cardId,
     Long payNum,
-    Integer payAmount,
+    Long payAmount,
     PaymentState payState,
     LocalDateTime payCreateAt,
     LocalDateTime payRefundAt,
