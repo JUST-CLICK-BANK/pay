@@ -98,7 +98,9 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         // 카드 유효성 검사
         Boolean myCard = apiCard.getAbleMycard(req.cardId());
-        System.out.println(myCard);
+        System.out.println("============================================");
+        System.out.println("myCard: " + myCard);
+        System.out.println("============================================");
         if (!myCard) {
             // 카드 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
