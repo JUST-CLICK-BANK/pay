@@ -12,12 +12,12 @@ public class ApiAccount {
     public final FeignAccount feignAccount;
 
     @Async
-    public AccountAmountResponse getAccountAmount(String account) {
-        return feignAccount.getAccountAmount(account);
+    public AccountAmountResponse getAccountAmount(String userToken, String account) {
+        return feignAccount.getAccountAmount(userToken, account);
     }
 
     @Async
-    public void updateMoney(AccountMoneyRequest accountMoneyRequest) {
-        feignAccount.updateMoney(accountMoneyRequest);
+    public void updateMoney(String userToken, AccountMoneyRequest accountMoneyRequest) {
+        feignAccount.updateMoney(userToken, accountMoneyRequest);
     }
 }
