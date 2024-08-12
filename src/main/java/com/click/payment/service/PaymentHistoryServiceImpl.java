@@ -15,15 +15,12 @@ import com.click.payment.domain.repository.BusinessRepository;
 import com.click.payment.domain.type.PaymentState;
 import com.click.payment.global.api.ApiAccount;
 import com.click.payment.global.api.ApiCard;
-import com.click.payment.global.dto.request.UpdateMoneyRequest;
-import com.click.payment.global.dto.response.AccountResponse;
-import com.click.payment.global.dto.response.CardResponse;
+import com.click.payment.global.dto.request.AccountMoneyRequest;
+import com.click.payment.global.dto.response.AccountAmountResponse;
 import com.click.payment.utils.JwtUtils;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
-import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -100,24 +97,17 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         UUID userId = jwtUtils.parseUserToken(userToken);
 
         // 카드 유효성 검사
-        Map<String, String> card = new HashMap<>();
-        String query = String.format("query { getMyCard(cardId: %s) { cardAble } }", req.cardId());
-        card.put("query", query);
-
-        System.out.println("cardId: " + req.cardId());
-        System.out.println("card: " + card);
-        CardResponse myCard = apiCard.getMyCard(card);
-        System.out.println("myCard: " + myCard.toString());
-        if (!myCard.cardAble()) {
+        Boolean myCard = apiCard.getAbleMycard(req.cardId());
+        if (!myCard) {
             // 카드 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
             return "결제 실패";
         }
 
         // 계좌 유효성 검사
-        AccountResponse accountAmount = apiAccount.getAccountAmount(req.account());
-        if (byBusinessIdAndPayId.getPayAmount() > accountAmount.accMoneyAmount()
-            || !accountAmount.accAble()) {
+        AccountAmountResponse accountAmount = apiAccount.getAccountAmount(req.account());
+        if (byBusinessIdAndPayId.getPayAmount() > accountAmount.amount()
+            || !accountAmount.accountAble()) {
             // 계좌 금액이 부족할 경우 혹은 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
             return "결제 실패";
@@ -132,7 +122,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         lastStandCardRepository.save(lastStandCard);
 
         // 계좌 연동 (가맹점)
-        UpdateMoneyRequest businessUpdateMoneyReq = new UpdateMoneyRequest(
+        AccountMoneyRequest businessUpdateMoneyReq = new AccountMoneyRequest(
             "deposit",
             byBusinessIdAndPayId.getBusiness().getBusinessAccount(),
             byBusinessIdAndPayId.getPayAmount(),
@@ -140,7 +130,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         );
         apiAccount.updateMoney(businessUpdateMoneyReq);
         // 계좌 연동 (고객)
-        UpdateMoneyRequest customerUpdateMoneyReq = new UpdateMoneyRequest(
+        AccountMoneyRequest customerUpdateMoneyReq = new AccountMoneyRequest(
             "transfer",
             req.account(),
             byBusinessIdAndPayId.getPayAmount(),

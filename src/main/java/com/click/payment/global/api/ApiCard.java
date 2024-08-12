@@ -12,7 +12,7 @@ public class ApiCard {
     public final FeignCard feignCard;
 
     @Async
-    public CardResponse getMyCard(Map<String, String> query) {
-        return feignCard.getMyCard(query);
+    public Boolean getAbleMycard(Long cardId) {
+        return feignCard.getAbleMycard(cardId);
     }
 }

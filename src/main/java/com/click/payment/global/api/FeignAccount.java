@@ -1,8 +1,7 @@
 package com.click.payment.global.api;
 
-import com.click.payment.global.dto.request.UpdateMoneyRequest;
-import com.click.payment.global.dto.response.UpdateMoneyResponse;
-import com.click.payment.global.dto.response.AccountResponse;
+import com.click.payment.global.dto.request.AccountMoneyRequest;
+import com.click.payment.global.dto.response.AccountAmountResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,12 +12,12 @@ public interface FeignAccount {
 
     // 계좌 검증
     @GetMapping(value = "/api/v1/accounts/pay")
-    AccountResponse getAccountAmount(@RequestParam("account") String account);
+    AccountAmountResponse getAccountAmount(@RequestParam("account") String account);
 
     // 계좌 입금 & 출금
     @GetMapping(value = "/api/v1/accounts/amount")
-    UpdateMoneyResponse updateMoney(
-        @RequestBody UpdateMoneyRequest updateMoneyRequest
+    void updateMoney(
+        @RequestBody AccountMoneyRequest accountMoneyRequest
     );
 
 }
