@@ -143,6 +143,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             byBusinessIdAndPayId.getPayAmount(),
             3
         );
+        apiAccount.updateMoney(customerUpdateMoneyReq);
 
         return "결제 완료";
     }
