@@ -5,14 +5,14 @@ public record PayTokenResponse(
     String businessName,
     String failRedirUrl,
     String successRedirUrl,
-    Integer payAmount
+    Long payAmount
 ) {
     public static PayTokenResponse from(
         Long payId,
         String businessName,
         String failRedirUrl,
         String successRedirUrl,
-        Integer payAmount
+        Long payAmount
     ) {
         return new PayTokenResponse(
             payId,

@@ -30,7 +30,7 @@ public class PaymentHistory {
     private Long payNum;
     // 결제 금액
     @Column(name = "PAY_AMOUNT")
-    private Integer payAmount;
+    private Long payAmount;
     // 결제 상태
     @Column(name = "PAY_STATE")
     @Enumerated(EnumType.STRING)

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record PaymentHistoryRequest(
     Long payNum,
-    Integer payAmount,
+    Long payAmount,
     String failRedirUrl,
     String successRedirUrl
 ) {

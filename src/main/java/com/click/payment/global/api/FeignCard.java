@@ -1,6 +1,6 @@
 package com.click.payment.global.api;
 
-import com.click.payment.global.dto.CardResponse;
+import com.click.payment.global.dto.response.CardResponse;
 import java.util.Map;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
