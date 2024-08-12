@@ -97,15 +97,15 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         UUID userId = jwtUtils.parseUserToken(userToken);
 
         // 카드 유효성 검사
-        Boolean myCard = apiCard.getAbleMycard(req.cardId());
-        System.out.println("============================================");
-        System.out.println("myCard: " + myCard);
-        System.out.println("============================================");
-        if (!myCard) {
-            // 카드 유효 여부가 false일 경우
-            byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
-            return "결제 실패";
-        }
+//        Boolean myCard = apiCard.getAbleMycard(req.cardId());
+//        System.out.println("============================================");
+//        System.out.println("myCard: " + myCard);
+//        System.out.println("============================================");
+//        if (!myCard) {
+//            // 카드 유효 여부가 false일 경우
+//            byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
+//            return "결제 실패";
+//        }
 
         // 계좌 유효성 검사
         AccountAmountResponse accountAmount = apiAccount.getAccountAmount(req.account());
