@@ -92,7 +92,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         System.out.println("============================================");
         System.out.println("req: " + req.toString());
         System.out.println("============================================");
-        System.out.println("business: " + byBusinessIdAndPayId);
+        System.out.println("business: " + byBusinessIdAndPayId.toString());
 
         if (byBusinessIdAndPayId.getPayId() == null) {
             throw new NullPointerException("결제내역 오류");
