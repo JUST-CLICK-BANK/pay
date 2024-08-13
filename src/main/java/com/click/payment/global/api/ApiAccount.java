@@ -18,6 +18,7 @@ public class ApiAccount {
 
     @Async
     public void updateMoney(String userToken, AccountMoneyRequest accountMoneyRequest) {
+        System.out.println("userToken: " + userToken);
         feignAccount.updateMoney(userToken, accountMoneyRequest);
     }
 }
