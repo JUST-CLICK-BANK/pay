@@ -89,11 +89,6 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         UpdatePaymentHistoryRequest req) {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
 
-        System.out.println("============================================");
-        System.out.println("req: " + req.toString());
-        System.out.println("============================================");
-        System.out.println("business: " + byBusinessIdAndPayId.toString());
-
         if (byBusinessIdAndPayId.getPayId() == null) {
             throw new NullPointerException("결제내역 오류");
         }
@@ -101,13 +96,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         // userToken
         UUID userId = jwtUtils.parseUserToken(userToken);
 
-        System.out.println("============================================");
-        System.out.println("card: " + req.cardId());
         // 카드 유효성 검사
         Boolean myCard = apiCard.getAbleMycard(req.cardId());
-        System.out.println("============================================");
-        System.out.println("myCard: " + myCard);
-        System.out.println("============================================");
         if (!myCard) {
             // 카드 유효 여부가 false일 경우
             byBusinessIdAndPayId.setPayState(PaymentState.valueOf("PAY_FAILED")); // 결제 실패
@@ -116,11 +106,6 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         // 계좌 유효성 검사
         AccountAmountResponse accountAmount = apiAccount.getAccountAmount(req.account());
-        System.out.println("============================================");
-        System.out.println("payAmount: " + byBusinessIdAndPayId.getPayAmount());
-        System.out.println("amount: " + accountAmount.amount());
-        System.out.println("accountAble: " + accountAmount.accountAble());
-        System.out.println("============================================");
         if (byBusinessIdAndPayId.getPayAmount() > accountAmount.amount()
             || !accountAmount.accountAble()) {
             // 계좌 금액이 부족할 경우 혹은 유효 여부가 false일 경우
