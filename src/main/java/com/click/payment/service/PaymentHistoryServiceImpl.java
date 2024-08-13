@@ -89,6 +89,11 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         UpdatePaymentHistoryRequest req) {
         PaymentHistory byBusinessIdAndPayId = paymentHistoryRepository.findByPayId(payId);
 
+        System.out.println("============================================");
+        System.out.println("req: " + req.toString());
+        System.out.println("============================================");
+        System.out.println("business: " + byBusinessIdAndPayId);
+
         if (byBusinessIdAndPayId.getPayId() == null) {
             throw new NullPointerException("결제내역 오류");
         }
