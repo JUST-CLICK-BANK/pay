@@ -122,6 +122,10 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         lastStandCardRepository.save(lastStandCard);
 
         // 계좌 연동 (가맹점)
+        String bearerToken = "Bearer " + userToken;
+        System.out.println("============================================");
+        System.out.println(bearerToken);
+        System.out.println("============================================");
         AccountMoneyRequest businessUpdateMoneyReq = new AccountMoneyRequest(
             "deposit",
             byBusinessIdAndPayId.getBusiness().getBusinessAccount(),
@@ -129,7 +133,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     9
         );
         System.out.println("business: " + businessUpdateMoneyReq);
-        apiAccount.updateMoney(userToken, businessUpdateMoneyReq);
+        System.out.println("============================================");
+        apiAccount.updateMoney(bearerToken, businessUpdateMoneyReq);
         // 계좌 연동 (고객)
         AccountMoneyRequest customerUpdateMoneyReq = new AccountMoneyRequest(
             "transfer",
@@ -138,7 +143,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             3
         );
         System.out.println("customer: " + customerUpdateMoneyReq);
-        apiAccount.updateMoney(userToken, customerUpdateMoneyReq);
+        System.out.println("============================================");
+        apiAccount.updateMoney(bearerToken, customerUpdateMoneyReq);
 
         return "결제 완료";
     }

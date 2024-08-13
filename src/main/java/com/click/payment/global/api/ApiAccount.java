@@ -17,7 +17,7 @@ public class ApiAccount {
     }
 
     @Async
-    public void updateMoney(String userToken, AccountMoneyRequest accountMoneyRequest) {
-        feignAccount.updateMoney(userToken, accountMoneyRequest);
+    public void updateMoney(String bearerToken, AccountMoneyRequest accountMoneyRequest) {
+        feignAccount.updateMoney(bearerToken, accountMoneyRequest);
     }
 }
