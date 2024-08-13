@@ -11,6 +11,9 @@ public class ApiCard {
 
     @Async
     public Boolean getAbleMycard(Long cardId) {
+        System.out.println("============================================");
+        System.out.println("card: " + cardId);
+        System.out.println("============================================");
         return feignCard.getAbleMycard(cardId);
     }
 }
