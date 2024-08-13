@@ -128,6 +128,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             byBusinessIdAndPayId.getPayAmount(),
     9
         );
+        System.out.println("business: " + businessUpdateMoneyReq);
         apiAccount.updateMoney(userToken, businessUpdateMoneyReq);
         // 계좌 연동 (고객)
         AccountMoneyRequest customerUpdateMoneyReq = new AccountMoneyRequest(
@@ -136,6 +137,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             byBusinessIdAndPayId.getPayAmount(),
             3
         );
+        System.out.println("customer: " + customerUpdateMoneyReq);
         apiAccount.updateMoney(userToken, customerUpdateMoneyReq);
 
         return "결제 완료";
