@@ -96,6 +96,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         // userToken
         UUID userId = jwtUtils.parseUserToken(userToken);
 
+        System.out.println("============================================");
+        System.out.println("card: " + req.cardId());
         // 카드 유효성 검사
         Boolean myCard = apiCard.getAbleMycard(req.cardId());
         System.out.println("============================================");
