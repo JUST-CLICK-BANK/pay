@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "feignAccount", url = "https://just-click.shop")
+@FeignClient(name = "feignAccount", url = "https://just-click.shop/api/v1/accounts")
 public interface FeignAccount {
 
     // 계좌 검증
-    @GetMapping(value = "/api/v1/accounts/pay")
+    @GetMapping(value = "/pay")
     AccountAmountResponse getAccountAmount(
         @RequestParam("account") String account
     );
 
     // 계좌 입금 & 출금
-    @PutMapping(value = "/api/v1/accounts/amount")
+    @PutMapping(value = "/amount")
     void updateMoney(
         @RequestHeader("Authorization") String userToken,
         @RequestBody AccountMoneyRequest accountMoneyRequest
