@@ -78,7 +78,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
         String token = jwtUtils.generateToken(payId, business.getBusinessName(), req.failRedirUrl(),
             req.successRedirUrl(), payAmount);
 
-        String appLink = String.format("exp://192.168.0.16:8081/--/path/into/app/pay/%s", token);
+        String appLink = String.format("clickbank://path/into/app/pay/%s", token);
         return SuccessPaymentResponse.from(payId, appLink);
     }
 
@@ -123,17 +123,12 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
 
         // 계좌 연동 (가맹점)
         String bearerToken = "Bearer " + userToken;
-        System.out.println("============================================");
-        System.out.println(bearerToken);
-        System.out.println("============================================");
         AccountMoneyRequest businessUpdateMoneyReq = new AccountMoneyRequest(
             "deposit",
             byBusinessIdAndPayId.getBusiness().getBusinessAccount(),
             byBusinessIdAndPayId.getPayAmount(),
     9
         );
-        System.out.println("business: " + businessUpdateMoneyReq);
-        System.out.println("============================================");
         apiAccount.updateMoney(bearerToken, businessUpdateMoneyReq);
         // 계좌 연동 (고객)
         AccountMoneyRequest customerUpdateMoneyReq = new AccountMoneyRequest(
@@ -142,8 +137,6 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
             byBusinessIdAndPayId.getPayAmount(),
             3
         );
-        System.out.println("customer: " + customerUpdateMoneyReq);
-        System.out.println("============================================");
         apiAccount.updateMoney(bearerToken, customerUpdateMoneyReq);
 
         return "결제 완료";
