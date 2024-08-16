@@ -83,6 +83,8 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     }
 
     // 결제 상태 수정
+    // 에러 뜰 경우 '고객센터에 문의하세요' 알럿 띄우기
+    // 중간중간 커밋을 할 것인지, 한 번에 커밋할 것인지 고민해보기
     @Override
     @Transactional
     public String updatePaymentHistoryState(String userToken, Long payId,
@@ -166,6 +168,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     }
 
     @Override
+    @Transactional
     public String cancelPaymentHistory(Long payId) {
         PaymentHistory byPayId = paymentHistoryRepository.findByPayId(payId);
 
@@ -175,6 +178,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     }
 
     @Override
+    @Transactional
     public String refundPaymentHistory(Long payId) {
         PaymentHistory byPayId = paymentHistoryRepository.findByPayId(payId);
 
